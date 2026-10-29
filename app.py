@@ -1,23 +1,51 @@
 import os
-import libsql_client
+import requests
 from flask import Flask, request, render_template_string, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = 'otr3_secret_key_2026'
 
-# قراءة المتغيرات وإزالة أي مسافات زائدة
-raw_url = os.environ.get("TURSO_URL", "").strip()
-TURSO_URL = raw_url.replace("libsql://", "https://")
+# إعدادات Turso
+TURSO_URL = os.environ.get("TURSO_URL", "").strip().replace("libsql://", "https://")
 TURSO_TOKEN = os.environ.get("TURSO_TOKEN", "").strip()
 
-try:
-    client = libsql_client.create_client_sync(url=TURSO_URL, auth_token=TURSO_TOKEN)
-except Exception as e:
-    print("Database connection error:", e)
-    raise e
+# دالة تنفيذ الاستعلامات عبر HTTP
+def execute_query(sql, args=None):
+    if not TURSO_URL or not TURSO_TOKEN:
+        raise Exception("TURSO_URL or TURSO_TOKEN is missing in Render Environment Variables")
+        
+    url = TURSO_URL + "/v2/pipeline"
+    headers = {
+        "Authorization": f"Bearer {TURSO_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    stmt = {"sql": sql}
+    if args:
+        stmt["args"] = [{"type": "text", "value": str(a)} for a in args]
+        
+    payload = {
+        "requests": [
+            {"type": "execute", "stmt": stmt},
+            {"type": "close"}
+        ]
+    }
+    
+    r = requests.post(url, headers=headers, json=payload, timeout=10)
+    if r.status_code != 200:
+        raise Exception(f"HTTP Error {r.status_code}: {r.text}")
+        
+    data = r.json()
+    if "results" in data and len(data["results"]) > 0:
+        res = data["results"][0]
+        if res.get("type") == "error":
+            raise Exception(f"Turso Error: {res.get('error', {}).get('message')}")
+        if "response" in res and res["response"].get("type") == "execute":
+            return res["response"]["result"]
+    return None
 
 def init_db():
-    client.execute("""
+    execute_query("""
         CREATE TABLE IF NOT EXISTS applications (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
             discord_name TEXT, 
@@ -160,7 +188,7 @@ def apply():
     company = request.form.get("company")
     
     try:
-        client.execute(
+        execute_query(
             "INSERT INTO applications (discord_name, ign, age, role, company, status) VALUES (?, ?, ?, ?, ?, 'pending')",
             [discord_name, ign, age, role, company]
         )
@@ -180,9 +208,13 @@ def admin():
     if not session.get('admin'):
         return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_LOGIN_HTML, error=None))
     
-    result = client.execute("SELECT * FROM applications WHERE status='pending' ORDER BY id DESC")
-    apps = result.rows
-    
+    try:
+        result = execute_query("SELECT * FROM applications WHERE status='pending' ORDER BY id DESC")
+        apps = result.get("rows", []) if result else []
+        # Turso returns rows as lists. Jinja app[0], app[1] works fine.
+    except Exception as e:
+        return f"<h3>خطأ في الإدارة:</h3><p>{str(e)}</p>", 500
+        
     return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_DASHBOARD_HTML, apps=apps))
 
 @app.route("/action/<int:id>", methods=["POST"])
@@ -191,7 +223,7 @@ def action(id):
     action = request.form.get("action")
     status = "accepted" if action == "accept" else "rejected"
     
-    client.execute("UPDATE applications SET status=? WHERE id=?", [status, id])
+    execute_query("UPDATE applications SET status=? WHERE id=?", [status, id])
     
     return redirect(url_for('admin'))
 
