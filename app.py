@@ -44,6 +44,7 @@ def execute_query(sql, args=None):
     return None
 
 def init_db():
+    # جدول المتقدمين
     execute_query("""
         CREATE TABLE IF NOT EXISTS applications (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -58,12 +59,30 @@ def init_db():
     """)
     try:
         execute_query("ALTER TABLE applications ADD COLUMN description TEXT")
-    except Exception:
-        pass
+    except Exception: pass
+
+    # جدول الشركات
+    execute_query("""
+        CREATE TABLE IF NOT EXISTS companies (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE
+        )
+    """)
+    
+    # إضافة شركات افتراضية إذا كان الجدول فارغاً
+    res = execute_query("SELECT count(*) FROM companies")
+    count = int(res["rows"][0][0]["value"]) if res and res.get("rows") else 0
+    if count == 0:
+        default_companies = ["شركة الشمال (North)", "شركة الصحراء (Sahara)", "شركة السريع (Express)"]
+        for c in default_companies:
+            execute_query("INSERT INTO companies (name) VALUES (?)", [c])
 
 init_db()
 
-COMPANIES = ["شركة الشمال (North)", "شركة الصحراء (Sahara)", "شركة السريع (Express)"]
+def get_companies():
+    res = execute_query("SELECT id, name FROM companies ORDER BY id ASC")
+    if not res or not res.get("rows"): return []
+    return [{"id": row[0]["value"], "name": row[1]["value"]} for row in res["rows"]]
 
 # --- التصميم الجديد ---
 HTML_LAYOUT = """
@@ -171,8 +190,7 @@ HTML_LAYOUT = """
   a { color: var(--primary); text-decoration: none; transition: color 0.2s; }
   a:hover { color: #7289da; }
   
-  /* Admin Table */
-  .table-container { overflow-x: auto; width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .table-container { overflow-x: auto; width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px;}
   .admin-table { width: 100%; border-collapse: collapse; text-align: right; }
   .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .admin-table th { background: rgba(0,0,0,0.3); color: var(--text-muted); font-weight: 700; font-size: 14px; }
@@ -190,6 +208,11 @@ HTML_LAYOUT = """
   .btn-reject:hover { background: #b9282d; }
   
   .login-link { text-align: center; margin-top: 20px; font-size: 14px; }
+  
+  /* إدارة الشركات */
+  .manage-companies { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .company-list { list-style: none; padding: 0; margin-top: 15px; }
+  .company-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -231,7 +254,7 @@ HOME_HTML = """
     <label><i class="fas fa-building"></i> الشركة المطلوبة</label>
     <select name="company" required>
       {% for c in companies %}
-      <option value="{{ c }}">{{ c }}</option>
+      <option value="{{ c.name }}">{{ c.name }}</option>
       {% endfor %}
     </select>
   </div>
@@ -295,12 +318,31 @@ ADMIN_DASHBOARD_HTML = """
     {% endfor %}
   </table>
 </div>
+
+<div class="manage-companies">
+  <h3 style="margin-bottom: 15px; color: #fff;"><i class="fas fa-city"></i> إدارة الشركات</h3>
+  <form method="post" action="/add_company" style="display: flex; gap: 10px;">
+    <input type="text" name="company_name" required placeholder="اسم الشركة الجديدة..." style="margin-bottom: 0;">
+    <button type="submit" class="btn-sm btn-accept" style="padding: 12px 20px; font-size: 15px;"><i class="fas fa-plus"></i> إضافة</button>
+  </form>
+  <ul class="company-list">
+    {% for comp in companies %}
+    <li class="company-item">
+      <span><i class="fas fa-building" style="color: var(--primary);"></i> {{ comp.name }}</span>
+      <form method="post" action="/delete_company/{{ comp.id }}" style="margin:0;">
+        <button type="submit" class="btn-sm btn-reject" style="padding: 6px 10px;"><i class="fas fa-trash"></i></button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 """
 
 @app.route("/", methods=["GET"])
 def home():
     msg = request.args.get("msg")
-    return render_template_string(HTML_LAYOUT, content=render_template_string(HOME_HTML, companies=COMPANIES, msg=msg))
+    companies = get_companies()
+    return render_template_string(HTML_LAYOUT, content=render_template_string(HOME_HTML, companies=companies, msg=msg))
 
 @app.route("/apply", methods=["POST"])
 def apply():
@@ -342,7 +384,25 @@ def admin():
     except Exception as e:
         return f"<div class='alert alert-error'>خطأ في الإدارة: {str(e)}</div>", 500
         
-    return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_DASHBOARD_HTML, apps=apps))
+    companies = get_companies()
+    return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_DASHBOARD_HTML, apps=apps, companies=companies))
+
+@app.route("/add_company", methods=["POST"])
+def add_company():
+    if not session.get('admin'): return redirect(url_for('admin'))
+    name = request.form.get("company_name").strip()
+    if name:
+        try:
+            execute_query("INSERT INTO companies (name) VALUES (?)", [name])
+        except Exception:
+            pass # تجاهل الخطأ إذا كانت الشركة موجودة مسبقاً
+    return redirect(url_for('admin'))
+
+@app.route("/delete_company/<int:id>", methods=["POST"])
+def delete_company(id):
+    if not session.get('admin'): return redirect(url_for('admin'))
+    execute_query("DELETE FROM companies WHERE id=?", [str(id)])
+    return redirect(url_for('admin'))
 
 @app.route("/action/<int:id>", methods=["POST"])
 def action(id):
@@ -350,7 +410,7 @@ def action(id):
     action = request.form.get("action")
     status = "accepted" if action == "accept" else "rejected"
     
-    execute_query("UPDATE applications SET status=? WHERE id=?", [status, id])
+    execute_query("UPDATE applications SET status=? WHERE id=?", [status, str(id)])
     return redirect(url_for('admin'))
 
 @app.route("/logout")
