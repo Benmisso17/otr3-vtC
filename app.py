@@ -9,10 +9,9 @@ app.secret_key = 'otr3_secret_key_2026'
 TURSO_URL = os.environ.get("TURSO_URL", "").strip().replace("libsql://", "https://")
 TURSO_TOKEN = os.environ.get("TURSO_TOKEN", "").strip()
 
-# دالة تنفيذ الاستعلامات عبر HTTP
 def execute_query(sql, args=None):
     if not TURSO_URL or not TURSO_TOKEN:
-        raise Exception("TURSO_URL or TURSO_TOKEN is missing in Render Environment Variables")
+        raise Exception("TURSO_URL or TURSO_TOKEN is missing")
         
     url = TURSO_URL + "/v2/pipeline"
     headers = {
@@ -53,6 +52,7 @@ def init_db():
             age TEXT, 
             role TEXT, 
             company TEXT, 
+            description TEXT,
             status TEXT
         )
     """)
@@ -61,6 +61,7 @@ init_db()
 
 COMPANIES = ["شركة الشمال (North)", "شركة الصحراء (Sahara)", "شركة السريع (Express)"]
 
+# --- التصميم الجديد ---
 HTML_LAYOUT = """
 <!doctype html>
 <html dir="rtl" lang="ar">
@@ -68,31 +69,128 @@ HTML_LAYOUT = """
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Of Europe3 online | VTC</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #1e2124; color: #fff; margin: 0; padding: 0; }
-  .header { background: #282b30; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.5); border-bottom: 2px solid #5865F2; }
-  .header h1 { margin: 0; color: #5865F2; font-size: 24px; }
-  .container { max-width: 600px; margin: 20px auto; padding: 20px; background: #36393f; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-  .form-group { margin-bottom: 15px; }
-  label { display: block; margin-bottom: 5px; color: #b9bbbe; font-weight: bold; }
-  input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #202225; background: #202225; color: #fff; font-size: 16px; box-sizing: border-box; }
-  input:focus, select:focus { outline: none; border-color: #5865F2; }
-  button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #5865F2; color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 10px; }
-  button:hover { background: #4752C4; }
-  .alert { padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px; font-weight: bold; }
-  .alert-success { background: #248046; color: #fff; }
-  .alert-error { background: #DA373C; color: #fff; }
-  a { color: #00b0f4; text-decoration: none; }
-  .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-  .admin-table th, .admin-table td { border: 1px solid #202225; padding: 10px; text-align: right; }
-  .admin-table th { background: #202225; }
-  .btn-accept { background: #248046; padding: 5px 10px; font-size: 12px; width: auto; margin: 0; }
-  .btn-reject { background: #DA373C; padding: 5px 10px; font-size: 12px; width: auto; margin: 0 5px; }
+  :root {
+    --primary: #5865F2;
+    --primary-hover: #4752C4;
+    --bg-dark: #0f1115;
+    --card-bg: rgba(30, 33, 36, 0.7);
+    --text-main: #f2f3f5;
+    --text-muted: #b5bac1;
+    --success: #23a559;
+    --danger: #da373c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { 
+    font-family: 'Tajawal', sans-serif; 
+    background: linear-gradient(135deg, #0f1115 0%, #1a1c23 100%);
+    color: var(--text-main); 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .header { 
+    width: 100%; 
+    padding: 30px 20px; 
+    text-align: center; 
+    background: rgba(15, 17, 21, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+  }
+  .header h1 { 
+    font-size: 28px; 
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+  }
+  .header h1 span { color: var(--primary); }
+  
+  .container { 
+    width: 100%;
+    max-width: 700px; 
+    background: var(--card-bg); 
+    border-radius: 16px; 
+    padding: 30px; 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 40px;
+  }
+  
+  .form-group { margin-bottom: 20px; position: relative; }
+  label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; font-size: 15px; }
+  input, select, textarea { 
+    width: 100%; 
+    padding: 14px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    background: rgba(0, 0, 0, 0.2); 
+    color: #fff; 
+    font-size: 16px; 
+    font-family: inherit;
+    transition: all 0.3s ease;
+  }
+  input:focus, select:focus, textarea:focus { 
+    outline: none; 
+    border-color: var(--primary); 
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  
+  .btn { 
+    width: 100%; 
+    padding: 15px; 
+    border: none; 
+    border-radius: 10px; 
+    background: linear-gradient(90deg, var(--primary) 0%, #7289da 100%);
+    color: white; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6); }
+  .btn:active { transform: translateY(0); }
+  
+  .alert { padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
+  .alert-success { background: rgba(35, 165, 89, 0.2); color: #4ade80; border: 1px solid rgba(35, 165, 89, 0.3); }
+  .alert-error { background: rgba(218, 55, 60, 0.2); color: #f87171; border: 1px solid rgba(218, 55, 60, 0.3); }
+  
+  a { color: var(--primary); text-decoration: none; transition: color 0.2s; }
+  a:hover { color: #7289da; }
+  
+  /* Admin Table */
+  .table-container { overflow-x: auto; width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .admin-table { width: 100%; border-collapse: collapse; text-align: right; }
+  .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .admin-table th { background: rgba(0,0,0,0.3); color: var(--text-muted); font-weight: 700; font-size: 14px; }
+  .admin-table tr:hover { background: rgba(255,255,255,0.02); }
+  
+  .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+  .badge-driver { background: rgba(88, 101, 242, 0.2); color: #a3b8ff; }
+  .badge-manager { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+  
+  .actions { display: flex; gap: 8px; }
+  .btn-sm { padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; color: #fff; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-size: 13px;}
+  .btn-accept { background: var(--success); }
+  .btn-accept:hover { background: #1e8e4c; }
+  .btn-reject { background: var(--danger); }
+  .btn-reject:hover { background: #b9282d; }
+  
+  .login-link { text-align: center; margin-top: 20px; font-size: 14px; }
 </style>
 </head>
 <body>
   <div class="header">
-    <h1>🚚 Of Europe3 online | نظام الشركات</h1>
+    <h1>🚚 <span>Of Europe3</span> online | نظام الشركات</h1>
   </div>
   <div class="container">
     {{ content|safe }}
@@ -102,76 +200,97 @@ HTML_LAYOUT = """
 """
 
 HOME_HTML = """
-<h2>مرحباً بك في نظام التوظيف</h2>
-<p style="color:#b9bbbe; line-height:1.6;">انضم إلى أحد شركاتنا الكبرى في سيرفر Of Europe3 online. املأ الاستمارة وسيتواصل معك المدير قريباً.</p>
-{% if msg %}<div class="alert alert-success">{{ msg }}</div>{% endif %}
+<h2 style="margin-bottom: 15px; font-size: 22px;">مرحباً بك في نظام التوظيف</h2>
+<p style="color: var(--text-muted); margin-bottom: 25px; line-height: 1.6;">انضم إلى أحد شركاتنا الكبرى في سيرفر Of Europe3 online. املأ الاستمارة بدقة وسيتواصل معك المدير قريباً.</p>
+{% if msg %}<div class="alert alert-success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
 <form method="post" action="/apply">
   <div class="form-group">
-    <label>اسمك في الديسكورد</label>
+    <label><i class="fab fa-discord"></i> اسمك في الديسكورد</label>
     <input type="text" name="discord_name" required placeholder="مثال: Ben_Misso#1234">
   </div>
   <div class="form-group">
-    <label>اسمك داخل اللعبة (IGN)</label>
+    <label><i class="fas fa-gamepad"></i> اسمك داخل اللعبة (IGN)</label>
     <input type="text" name="ign" required placeholder="الاسم الذي تظهر به في OTR3">
   </div>
   <div class="form-group">
-    <label>العمر</label>
+    <label><i class="fas fa-calendar-alt"></i> العمر</label>
     <input type="number" name="age" required min="10" max="99">
   </div>
   <div class="form-group">
-    <label>نوع الطلب</label>
+    <label><i class="fas fa-user-tie"></i> نوع الطلب</label>
     <select name="role" required>
       <option value="سائق">سائق (Driver)</option>
       <option value="مدير شركة">مدير شركة (Manager)</option>
     </select>
   </div>
   <div class="form-group">
-    <label>الشركة المطلوبة</label>
+    <label><i class="fas fa-building"></i> الشركة المطلوبة</label>
     <select name="company" required>
       {% for c in companies %}
       <option value="{{ c }}">{{ c }}</option>
       {% endfor %}
     </select>
   </div>
-  <button type="submit">إرسال الطلب</button>
+  <div class="form-group">
+    <label><i class="fas fa-pen"></i> نبذة عنك (اختياري)</label>
+    <textarea name="description" rows="3" placeholder="اكتب خبرتك، عدد ساعات لعبك، أو لماذا نختارك..."></textarea>
+  </div>
+  <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> إرسال الطلب</button>
 </form>
-<p style="text-align:center; margin-top:15px; font-size:12px;"><a href="/admin">دخول الإدارة</a></p>
+<div class="login-link"><a href="/admin"><i class="fas fa-lock"></i> دخول الإدارة</a></div>
 """
 
 ADMIN_LOGIN_HTML = """
-<h2>لوحة الإدارة</h2>
-{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+<h2 style="text-align:center; margin-bottom: 25px;">لوحة الإدارة</h2>
+{% if error %}<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
 <form method="post" action="/admin">
   <div class="form-group">
-    <label>كلمة المرور</label>
-    <input type="password" name="password" required>
+    <label><i class="fas fa-key"></i> كلمة المرور</label>
+    <input type="password" name="password" required style="text-align: center; font-size: 20px; letter-spacing: 2px;">
   </div>
-  <button type="submit">دخول</button>
+  <button type="submit" class="btn">دخول</button>
 </form>
 """
 
 ADMIN_DASHBOARD_HTML = """
-<h2>الطلبات المعلقة</h2>
-<p><a href="/">عودة للرئيسية</a> | <a href="/logout" style="color:#DA373C;">تسجيل خروج</a></p>
-<table class="admin-table">
-  <tr><th>الديسكورد</th><th>اسم اللعبة</th><th>الرتبة</th><th>الشركة</th><th>إجراء</th></tr>
-  {% for app in apps %}
-  <tr>
-    <td>{{ app[1] }}</td>
-    <td>{{ app[2] }}</td>
-    <td>{{ app[4] }}</td>
-    <td>{{ app[5] }}</td>
-    <td>
-      <form method="post" action="/action/{{ app[0] }}" style="display:inline;">
-        <button name="action" value="accept" class="btn-accept">قبول</button>
-        <button name="action" value="reject" class="btn-reject">رفض</button>
-      </form>
-    </td>
-  </tr>
-  {% else %}
-  <tr><td colspan="5" style="text-align:center;">لا توجد طلبات جديدة حالياً.</td></tr>
-  {% endfor %}
-</table>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <h2>الطلبات المعلقة</h2>
+  <div>
+    <a href="/" style="margin-left: 15px;"><i class="fas fa-home"></i> الرئيسية</a>
+    <a href="/logout" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> خروج</a>
+  </div>
+</div>
+<div class="table-container">
+  <table class="admin-table">
+    <tr><th>الديسكورد</th><th>اسم اللعبة</th><th>العمر</th><th>الرتبة</th><th>الشركة</th><th>النبذة</th><th>إجراء</th></tr>
+    {% for app in apps %}
+    <tr>
+      <td style="font-weight: bold; color: #a3b8ff;">{{ app[1] }}</td>
+      <td>{{ app[2] }}</td>
+      <td>{{ app[3] }}</td>
+      <td>
+        {% if app[4] == 'مدير شركة' %}
+          <span class="badge badge-manager">{{ app[4] }}</span>
+        {% else %}
+          <span class="badge badge-driver">{{ app[4] }}</span>
+        {% endif %}
+      </td>
+      <td>{{ app[5] }}</td>
+      <td style="max-width: 150px; font-size: 13px; color: #b5bac1;">{{ app[6] or '-' }}</td>
+      <td>
+        <div class="actions">
+          <form method="post" action="/action/{{ app[0] }}" style="display:inline;">
+            <button name="action" value="accept" class="btn-sm btn-accept"><i class="fas fa-check"></i> قبول</button>
+            <button name="action" value="reject" class="btn-sm btn-reject"><i class="fas fa-times"></i> رفض</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" style="text-align:center; padding: 30px; color: var(--text-muted);">لا توجد طلبات جديدة حالياً.</td></tr>
+    {% endfor %}
+  </table>
+</div>
 """
 
 @app.route("/", methods=["GET"])
@@ -186,15 +305,16 @@ def apply():
     age = request.form.get("age")
     role = request.form.get("role")
     company = request.form.get("company")
+    description = request.form.get("description", "")
     
     try:
         execute_query(
-            "INSERT INTO applications (discord_name, ign, age, role, company, status) VALUES (?, ?, ?, ?, ?, 'pending')",
-            [discord_name, ign, age, role, company]
+            "INSERT INTO applications (discord_name, ign, age, role, company, description, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')",
+            [discord_name, ign, age, role, company, description]
         )
         return redirect(url_for('home', msg="تم إرسال طلبك بنجاح! انتظر مراجعة الإدارة."))
     except Exception as e:
-        return f"<h3>حدث خطأ في قاعدة البيانات:</h3><p>{str(e)}</p>", 500
+        return f"<div class='alert alert-error'>حدث خطأ في قاعدة البيانات: {str(e)}</div>", 500
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
@@ -216,7 +336,7 @@ def admin():
             parsed_row = [col.get("value") for col in row]
             apps.append(parsed_row)
     except Exception as e:
-        return f"<h3>خطأ في الإدارة:</h3><p>{str(e)}</p>", 500
+        return f"<div class='alert alert-error'>خطأ في الإدارة: {str(e)}</div>", 500
         
     return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_DASHBOARD_HTML, apps=apps))
 
@@ -227,7 +347,6 @@ def action(id):
     status = "accepted" if action == "accept" else "rejected"
     
     execute_query("UPDATE applications SET status=? WHERE id=?", [status, id])
-    
     return redirect(url_for('admin'))
 
 @app.route("/logout")
