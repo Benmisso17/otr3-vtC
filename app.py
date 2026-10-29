@@ -210,8 +210,11 @@ def admin():
     
     try:
         result = execute_query("SELECT * FROM applications WHERE status='pending' ORDER BY id DESC")
-        apps = result.get("rows", []) if result else []
-        # Turso returns rows as lists. Jinja app[0], app[1] works fine.
+        raw_rows = result.get("rows", []) if result else []
+        apps = []
+        for row in raw_rows:
+            parsed_row = [col.get("value") for col in row]
+            apps.append(parsed_row)
     except Exception as e:
         return f"<h3>خطأ في الإدارة:</h3><p>{str(e)}</p>", 500
         
