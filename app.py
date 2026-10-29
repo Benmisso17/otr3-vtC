@@ -56,6 +56,10 @@ def init_db():
             status TEXT
         )
     """)
+    try:
+        execute_query("ALTER TABLE applications ADD COLUMN description TEXT")
+    except Exception:
+        pass
 
 init_db()
 
