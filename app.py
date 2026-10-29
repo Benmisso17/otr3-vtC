@@ -6,8 +6,8 @@ app = Flask(__name__)
 app.secret_key = 'otr3_secret_key_2026'
 
 # ⚠️⚠️ ضع رابط قاعدة البيانات والرمز اللذين نسختهما من Turso هنا ⚠️⚠️
-TURSO_URL = "https://ben-misso-benmisso.aws-eu-central-1.turso.io"
-TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTMyOTg5MTcsImlkIjoiMDFhMTg4ZWYtODcwMS03MDc3LWI0NTEtMjMzNzNhMjg1MTY3Iiwia2lkIjoiNVBZY3ZfY3BqS09jdUFPaFhYT2pkVld2bUhBd18tMnlabS1teGtSNjVqOCIsInJpZCI6ImY3MmM5YjQ5LTQxYWUtNDI0MS05OGYzLWQzOGU0NjU4M2UxZSJ9.gDEQWX1SsWhR6CrSjwg7A1yh6EH8hEPIWrACK2ytXPj_JvR0MNZsPC_6id6-BXeaGa-9SN0Q-kNxqSYY9jMpCA"
+TURSO_URL = os.environ.get("TURSO_URL", "").replace("libsql://", "https://")
+TURSO_TOKEN = os.environ.get("TURSO_TOKEN", "")
 
 client = libsql_client.create_client_sync(url=TURSO_URL, auth_token=TURSO_TOKEN)
 
