@@ -5,11 +5,16 @@ from flask import Flask, request, render_template_string, redirect, url_for, ses
 app = Flask(__name__)
 app.secret_key = 'otr3_secret_key_2026'
 
-# ⚠️⚠️ ضع رابط قاعدة البيانات والرمز اللذين نسختهما من Turso هنا ⚠️⚠️
-TURSO_URL = os.environ.get("TURSO_URL", "").replace("libsql://", "https://")
-TURSO_TOKEN = os.environ.get("TURSO_TOKEN", "")
+# قراءة المتغيرات وإزالة أي مسافات زائدة
+raw_url = os.environ.get("TURSO_URL", "").strip()
+TURSO_URL = raw_url.replace("libsql://", "https://")
+TURSO_TOKEN = os.environ.get("TURSO_TOKEN", "").strip()
 
-client = libsql_client.create_client_sync(url=TURSO_URL, auth_token=TURSO_TOKEN)
+try:
+    client = libsql_client.create_client_sync(url=TURSO_URL, auth_token=TURSO_TOKEN)
+except Exception as e:
+    print("Database connection error:", e)
+    raise e
 
 def init_db():
     client.execute("""
