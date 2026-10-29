@@ -159,12 +159,14 @@ def apply():
     role = request.form.get("role")
     company = request.form.get("company")
     
-    client.execute(
-        "INSERT INTO applications (discord_name, ign, age, role, company, status) VALUES (?, ?, ?, ?, ?, 'pending')",
-        [discord_name, ign, age, role, company]
-    )
-    
-    return redirect(url_for('home', msg="تم إرسال طلبك بنجاح! انتظر مراجعة الإدارة."))
+    try:
+        client.execute(
+            "INSERT INTO applications (discord_name, ign, age, role, company, status) VALUES (?, ?, ?, ?, ?, 'pending')",
+            [discord_name, ign, age, role, company]
+        )
+        return redirect(url_for('home', msg="تم إرسال طلبك بنجاح! انتظر مراجعة الإدارة."))
+    except Exception as e:
+        return f"<h3>حدث خطأ في قاعدة البيانات:</h3><p>{str(e)}</p>", 500
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
