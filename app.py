@@ -353,7 +353,7 @@ ADMIN_DASHBOARD_HTML = """
 
     <!-- جدول الطلبات -->
     <div style="overflow-x: auto; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);">
-        <table style="width: 100%; border-collapse: collapse; text-align: right; min-width: 900px; font-size: 0.95rem; color: #ffffff;">
+        <table style="width: 100%; border-collapse: collapse; text-align: right; min-width: 1000px; font-size: 0.95rem; color: #ffffff;">
             <thead style="background: rgba(0,0,0,0.6); color: #00f2fe;">
                 <tr style="border-bottom: 2px solid #00f2fe;">
                     <th style="padding: 15px;">الديسكورد</th>
@@ -369,22 +369,23 @@ ADMIN_DASHBOARD_HTML = """
             <tbody style="color: #e2e8f0;">
                 {% for app in apps %}
                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <td style="padding: 15px; color: #4facfe; font-weight: bold;">{{ app.discord_name }}</td>
-                    <td style="padding: 15px;">{{ app.ign }}</td>
-                    <td style="padding: 15px;">{{ app.age }}</td>
-                    <td style="padding: 15px;">{{ app.role }}</td>
-                    <td style="padding: 15px;">{{ app.company }}</td>
-                    <td style="padding: 15px; max-width: 250px; word-wrap: break-word; white-space: pre-wrap; font-size: 0.85rem; color: #cbd5e1;">{{ app.description }}</td>
+                    <!-- استخدام الأقواس المربعة لضمان قراءة البيانات من القاموس -->
+                    <td style="padding: 15px; color: #4facfe; font-weight: bold;">{{ app['discord_name'] if app['discord_name'] else 'غير متوفر' }}</td>
+                    <td style="padding: 15px;">{{ app['ign'] if app['ign'] else 'غير متوفر' }}</td>
+                    <td style="padding: 15px;">{{ app['age'] }}</td>
+                    <td style="padding: 15px;">{{ app['role'] if app['role'] else app['rank'] if app['rank'] else 'غير متوفر' }}</td>
+                    <td style="padding: 15px;">{{ app['company'] }}</td>
+                    <td style="padding: 15px; max-width: 250px; word-wrap: break-word; white-space: pre-wrap; font-size: 0.85rem; color: #cbd5e1;">{{ app['description'] if app['description'] else app['bio'] if app['bio'] else 'لا يوجد وصف' }}</td>
                     <td style="padding: 15px;">
-                        <span style="background: {% if app.status == 'pending' %}#f59e0b{% elif app.status == 'accepted' %}#22c55e{% else %}#ef4444{% endif %}; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; color: #fff; font-weight: bold; display: inline-block; text-align: center; min-width: 70px;">{{ app.status }}</span>
+                        <span style="background: {% if app['status']|lower == 'pending' %}#f59e0b{% elif app['status']|lower == 'accepted' %}#22c55e{% else %}#ef4444{% endif %}; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; color: #fff; font-weight: bold; display: inline-block; text-align: center; min-width: 70px;">{{ app['status'] }}</span>
                     </td>
                     <td style="padding: 15px; white-space: nowrap;">
-                        {% if app.status == 'pending' %}
-                        <form action="/action/{{ app.id }}" method="POST" style="display:inline;">
+                        {% if app['status']|lower == 'pending' %}
+                        <form action="/action/{{ app['id'] }}" method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="accept">
                             <button type="submit" style="background: #22c55e; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 5px; width: 100%;">قبول ✓</button>
                         </form>
-                        <form action="/action/{{ app.id }}" method="POST" style="display:inline;">
+                        <form action="/action/{{ app['id'] }}" method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="reject">
                             <button type="submit" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;">رفض ✗</button>
                         </form>
@@ -415,8 +416,8 @@ ADMIN_DASHBOARD_HTML = """
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
         {% for c in companies %}
         <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-            <span style="font-weight: 600;">{{ c.name }}</span>
-            <form action="/delete_company/{{ c.id }}" method="POST" style="margin: 0;">
+            <span style="font-weight: 600;">{{ c['name'] if c['name'] else c.name }}</span>
+            <form action="/delete_company/{{ c['id'] if c['id'] else c.id }}" method="POST" style="margin: 0;">
                 <button type="submit" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; padding: 8px 12px; border-radius: 5px; cursor: pointer;">🗑️</button>
             </form>
         </div>
