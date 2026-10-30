@@ -277,11 +277,11 @@ HOME_HTML = """
             <form id="vtcForm" action="/apply" method="POST">
                 <div class="input-group">
                     <label>اسم الديسكورد (Discord)</label>
-                    <input type="text" name="discord" id="discord" placeholder="مثال: User#1234" required>
+                    <input type="text" name="discord_name" id="discord" placeholder="مثال: User#1234" required>
                 </div>
                 <div class="input-group">
                     <label>اسم اللعبة (In-Game Name)</label>
-                    <input type="text" name="game_name" id="game_name" placeholder="مثال: Ahmed_TR" required>
+                    <input type="text" name="ign" id="game_name" placeholder="مثال: Ahmed_TR" required>
                 </div>
                 <div class="input-group">
                     <label>العمر (Age)</label>
@@ -289,7 +289,7 @@ HOME_HTML = """
                 </div>
                 <div class="input-group">
                     <label>التقديم بصفة (Apply As)</label>
-                    <select name="rank" id="rank" required>
+                    <select name="role" id="rank" required>
                         <option value="" disabled selected>اختر نوع التقديم...</option>
                         <option value="سائق">سائق (Driver)</option>
                         <option value="مدير شركة">مدير شركة (Company Manager)</option>
@@ -306,7 +306,7 @@ HOME_HTML = """
                 </div>
                 <div class="input-group">
                     <label>نبذة عنك (Bio)</label>
-                    <textarea name="bio" id="bio" placeholder="اكتب عن خبرتك في القيادة..." maxlength="200" required></textarea>
+                    <textarea name="description" id="bio" placeholder="اكتب عن خبرتك في القيادة..." maxlength="200" required></textarea>
                     <span class="char-count" id="charCount">0 / 200</span>
                 </div>
                 <button type="submit" class="btn-submit" id="submitBtn">
