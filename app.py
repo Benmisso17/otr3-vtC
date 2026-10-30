@@ -228,13 +228,7 @@ HTML_LAYOUT = """
 
 HOME_HTML = """
 <style>
-    :root {
-        --primary: #00f2fe;
-        --secondary: #4facfe;
-        --dark-bg: #0f172a;
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.1);
-    }
+    :root { --primary: #00f2fe; --secondary: #4facfe; --dark-bg: #0f172a; --glass-bg: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1); }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
     .vtc-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; position: relative; }
     #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
@@ -280,7 +274,7 @@ HOME_HTML = """
         </div>
         <div class="form-side">
             <h2>تقديم طلب انضمام</h2>
-            <form id="vtcForm" action="/submit" method="POST">
+            <form id="vtcForm" action="/apply" method="POST">
                 <div class="input-group">
                     <label>اسم الديسكورد (Discord)</label>
                     <input type="text" name="discord" id="discord" placeholder="مثال: User#1234" required>
@@ -294,22 +288,19 @@ HOME_HTML = """
                     <input type="number" name="age" id="age" placeholder="مثال: 21" min="15" max="99" required>
                 </div>
                 <div class="input-group">
-                    <label>الرتبة الحالية (Rank)</label>
+                    <label>التقديم بصفة (Apply As)</label>
                     <select name="rank" id="rank" required>
-                        <option value="" disabled selected>اختر رتبتك...</option>
-                        <option value="مبتدئ">مبتدئ (Beginner)</option>
-                        <option value="متوسط">متوسط (Intermediate)</option>
-                        <option value="محترف">محترف (Professional)</option>
-                        <option value="خبير">خبير (Expert)</option>
+                        <option value="" disabled selected>اختر نوع التقديم...</option>
+                        <option value="سائق">سائق (Driver)</option>
+                        <option value="مدير شركة">مدير شركة (Company Manager)</option>
                     </select>
                 </div>
                 <div class="input-group">
                     <label>الشركة المراد الانضمام إليها (Company)</label>
                     <select name="company" id="company" required>
                         <option value="" disabled selected>اختر الشركة...</option>
-                        <!-- هذا الجزء سيقوم بسحب الشركات من قاعدة البيانات تلقائياً -->
                         {% for c in companies %}
-                        <option value="{{ c }}">{{ c }}</option>
+                        <option value="{{ c.name }}">{{ c.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
