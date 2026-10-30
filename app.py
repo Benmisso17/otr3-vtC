@@ -352,24 +352,32 @@ ADMIN_DASHBOARD_HTML = """
   </div>
 </div>
 <div class="table-container">
-  <table class="admin-table">
-    <tr><th>الديسكورد</th><th>اسم اللعبة</th><th>العمر</th><th>الرتبة</th><th>الشركة</th>
-<th>الوصف</th><th>النبذة</th><th>إجراء</th></tr>
-    {% for app in apps %}
-    <tr>
-      <td style="font-weight: bold; color: #a3b8ff;">{{ app[1] }}</td>
-      <td>{{ app[2] }}</td>
-      <td>{{ app[3] }}</td>
-      <td>
-        {% if app[4] == 'مدير شركة' %}
-          <span class="badge badge-manager">{{ app[4] }}</span>
-        {% else %}
-          <span class="badge badge-driver">{{ app[4] }}</span>
-        {% endif %}
-      </td>
-      <td>{{ app[5] }}</td>
-      <td style="max-width: 150px; font-size: 13px; color: #b5bac1;">{{ app[6] or '-' }}</td>
-      <td>
+  
+        <div style="overflow-x: auto; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); margin-top: 15px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: right; min-width: 800px; font-size: 0.9rem;">
+            <thead style="background: rgba(0,0,0,0.2);">
+                <tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">
+                    <th style="padding: 15px;">الديسكورد</th>
+                    <th style="padding: 15px;">اللعبة</th>
+                    <th style="padding: 15px;">العمر</th>
+                    <th style="padding: 15px;">الرتبة</th>
+                    <th style="padding: 15px;">الشركة</th>
+                    <th style="padding: 15px;">الوصف</th>
+                    <th style="padding: 15px;">الحالة</th>
+                    <th style="padding: 15px;">إجراء</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in apps %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 15px;">{{ app.discord_name }}</td>
+                    <td style="padding: 15px;">{{ app.ign }}</td>
+                    <td style="padding: 15px;">{{ app.age }}</td>
+                    <td style="padding: 15px;">{{ app.role }}</td>
+                    <td style="padding: 15px;">{{ app.company }}</td>
+                    <td style="padding: 15px; max-width: 250px; word-wrap: break-word; white-space: pre-wrap;">{{ app.description }}</td>
+                    <td style="padding: 15px;">{{ app.status }}</td>
+                    <td>
         <div class="actions">
           <form method="post" action="/action/{{ app[0] }}" style="display:inline;">
             <button name="action" value="accept" class="btn-sm btn-accept"><i class="fas fa-check"></i> قبول</button>
@@ -377,11 +385,12 @@ ADMIN_DASHBOARD_HTML = """
           </form>
         </div>
       </td>
-    </tr>
-    {% else %}
-    <tr><td colspan="7" style="text-align:center; padding: 30px; color: var(--text-muted);">لا توجد طلبات جديدة حالياً.</td></tr>
-    {% endfor %}
-  </table>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        
 </div>
 
 <div class="manage-companies">
