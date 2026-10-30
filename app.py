@@ -353,7 +353,8 @@ ADMIN_DASHBOARD_HTML = """
 </div>
 <div class="table-container">
   <table class="admin-table">
-    <tr><th>الديسكورد</th><th>اسم اللعبة</th><th>العمر</th><th>الرتبة</th><th>الشركة</th><th>النبذة</th><th>إجراء</th></tr>
+    <tr><th>الديسكورد</th><th>اسم اللعبة</th><th>العمر</th><th>الرتبة</th><th>الشركة</th>
+<th>الوصف</th><th>النبذة</th><th>إجراء</th></tr>
     {% for app in apps %}
     <tr>
       <td style="font-weight: bold; color: #a3b8ff;">{{ app[1] }}</td>
