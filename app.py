@@ -464,11 +464,13 @@ def admin():
     
     try:
         result = execute_query("SELECT * FROM applications WHERE status='pending' ORDER BY id DESC")
-        raw_rows = result.get("rows", []) if result else []
         apps = []
-        for row in raw_rows:
-            parsed_row = [col.get("value") for col in row]
-            apps.append(parsed_row)
+        if result:
+            cols = [c.get("name") for c in result.get("cols", [])]
+            raw_rows = result.get("rows", [])
+            for row in raw_rows:
+                row_values = [col.get("value") for col in row]
+                apps.append(dict(zip(cols, row_values)))
     except Exception as e:
         return f"<div class='alert alert-error'>خطأ في الإدارة: {str(e)}</div>", 500
         
