@@ -517,3 +517,13 @@ if __name__ == "__main__":
 def family_page():
     with open("family.html", "r", encoding="utf-8") as f:
         return f.read()
+
+@app.route('/family')
+def family_page():
+    with open('family.html', 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/team')
+def team_page():
+    with open('staff.html', 'r', encoding='utf-8') as f:
+        return f.read()
