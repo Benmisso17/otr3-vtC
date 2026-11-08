@@ -508,15 +508,7 @@ def logout():
     session.pop('admin', None)
     return redirect(url_for('home'))
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
 
-
-@app.route("/family")
-def family_page():
-    with open("family.html", "r", encoding="utf-8") as f:
-        return f.read()
 
 @app.route('/family')
 def family_page():
@@ -527,3 +519,8 @@ def family_page():
 def team_page():
     with open('staff.html', 'r', encoding='utf-8') as f:
         return f.read()
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
