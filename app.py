@@ -546,38 +546,38 @@ def family_page():
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-4">
                 <div class="flex flex-col gap-6">
-                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
-                        <span class="text-4xl">🏆</span>
+                    <div class="glass-card p-6 rounded-2xl flex items-center justify-between flex-row-reverse">
                         <div>
                             <h3 class="text-xl font-bold text-white mb-1">فعاليات حصرية</h3>
-                            <p class="text-gray-400 text-sm">مسابقات أسبوعية وجوائز قتمة تنتظرك</p>
+                            <p class="text-gray-400 text-sm">مسابقات أسبوعية وجوائز قتمة تنتظرد</p>
                         </div>
+                        <span class="text-4xl">🏎</span>
                     </div>
-                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
-                        <span class="text-4xl">🛡️</span>
+                    <div class="glass-card p-6 rounded-2xl flex items-center justify-between flex-row-reverse">
                         <div>
-                            <h3 class="text-xl font-bold text-white mb-1">إدارة احتراف</h3>
-                            <p class="text-gray-400 text-sm">طاقم متواجد 24/7 لضمان أفضل تجربة</p>
+                            <h3 class="text-xl font-bold text-white mb-1">إدارة احترافًك</h3>
+                            <p class="text-gray-400 text-sm">الطاقم محترف ومتواجد دائما لنضمان أفضل تجربة</p>
                         </div>
+                        <span class="text-4xl">🛡️</span>
                     </div>
-                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
-                        <span class="text-4xl">🚀</span>
+                    <div class="glass-card p-6 rounded-2xl flex items-center justify-between flex-row-reverse">
                         <div>
                             <h3 class="text-xl font-bold text-white mb-1">ليبه تفاعلية</h3>
-                            <p class="text-gray-400 text-sm">مجتمع نشط ،بوتات مميزة، وأجواء لا تنسىا</p>
+                            <p class="text-gray-400 text-sm">مجتمع نشط ، وبوتات مميزة، وأجواء لا تنسىا</p>
                         </div>
+                        <span class="text-4xl">🚀</span>
                     </div>
                 </div>
 
-                <div class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center">
-                    <h3 class="text-xl font-bold text-white mb-4">مرحبا بالأعضاءП</h3>
-                    <iframe src="https://discord.com/widget?id=1528147384914153512&theme=dark" width="100%" height="350" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" class="rounded-xl border-0"></iframe>
+                <div class="glass-card p-0 rounded-2xl flex flex-col items-center justify-center overflow-hidden pb-4">
+                    <h3 class="text-xl font-bold text-white my-4 py-2">مرحبا بالأعضاءџ</h3>
+                    <iframe src="https://discord.com/widget?id=1528147384914153512&theme=dark" width="100%" height="400" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" class="wx-full border-0"></iframe>
                 </div>
             </div>
 
             <a href="https://discord.gg/Fcdz5YeMb" target="_blank" class="discord-btn text-white font-bold text-xl py-3 px-10 rounded-full flex items-center gap-3 mt-10 mb-8">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.2,46,96.12,53,91.08,65.69,84.69,65.69Z"></path></svg>
-                دخول السيررر
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c,.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.2,46,96.12,53,91.08,65.69,84.69,65.69Z"></path></svg>
+                دخول السيرزر
             </a>
         </div>
     </body>
