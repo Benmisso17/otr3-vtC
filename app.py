@@ -524,102 +524,63 @@ def family_page():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Family | مجتمع النخبة</title>
         <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400,700,909&display=swap" rel="stylesheet">
         <style>
-            body {
-                font-family: 'Cairo', sans-serif;
-                background-color: #05050a;
-                color: white;
-                overflow-x: hidden;
-                margin: 0;
-            }
-            .glow-bg {
-                position: fixed;
-                top: 0; left: 0; width: 100%; height: 100%;
-                background: radial-gradient(circle at 15% 50%, rgba(88, 101, 242, 0.15), transparent 40%),
-                            radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.1), transparent 40%);
-                z-index: -1;
-                animation: pulseBg 10s infinite alternate;
-            }
-            @keyframes pulseBg {
-                0% { opacity: 0.7; transform: scale(1); }
-                100% { opacity: 1; transform: scale(1.1); }
-            }
-            .glass-card {
-                background: rgba(255, 255, 255, 0.03);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.05);
-                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-                transition: all 0.4s ease;
-            }
-            .glass-card:hover {
-                transform: translateY(-10px);
-                border-color: rgba(212, 175, 55, 0.4);
-                box-shadow: 0 10px 40px rgba(212, 175, 55, 0.15);
-            }
-            .discord-btn {
-                background: linear-gradient(45deg, #5865F2, #8b5cf6);
-                box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-            }
-            .discord-btn:hover {
-                box-shadow: 0 0 40px rgba(88, 101, 242, 0.8);
-                transform: scale(1.05);
-            }
-            .gold-text {
-                background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
+            body { font-family: 'Cairo', sans-serif; background-color: #05050a; color: white; margin: 0; min-height: 100vh; overflow-x: hidden; }
+            .glow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 15% 50%, rgba(88, 101, 242, 0.15), transparent 40%), radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.1), transparent 40%); z-index: -1; animation: pulseBg 10s infinite alternate; }
+            @keyframes pulseBg { 0% { opacity: 0.7; transform: scale(1); } 100%{opacity: 1; transform: scale(1.1); } }
+            .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); transition: all 0.4s ease; }
+            .glass-card:hover { transform: translateY(-5px); border-color: rgba(212, 175, 55, 0.4); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.15); }
+            .discord-btn { background: linear-gradient(45deg, #5865F2, #8b5cf6); box-shadow: 0 0 20px rgba(88, 101, 242, 0.5); transition: all 0.3s ease; }
+            .discord-btn:hover { box-shadow: 0 0 40px rgba(88, 101, 242, 0.8); transform: scale(1.05); }
+            .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         </style>
     </head>
-    <body class="min-h-screen flex flex-col items-center justify-center relative">
-        
+    <body class="flex flex-col items-center justify-center relative p-4">
         <div class="glow-bg"></div>
-
-        <div class="container mx-auto px-6 py-12 flex flex-col items-center z-10 text-center">
-            
-            <div class="mb-8 animate-bounce">
-                <h1 class="text-6xl md:text-8xl font-black tracking-widest gold-text drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
-                    FAMILY
-                </h1>
+        <div class="container mx-auto max-w-6xl flex flex-col items-center z-10">
+            <div class="mb-8 text-center animate-bounce mt-8">
+                <h1 class="text-6xl md:text-8xl font-black tracking-widest gold-text drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">FAMILY</h1>
                 <p class="text-gray-400 text-lg md:text-xl mt-4 font-bold tracking-widest">مجتمع النخبة والاحتراف</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full max-w-5xl">
-                <div class="glass-card p-8 rounded-3xl flex flex-col items-center">
-                    <span class="text-4xl mb-4">🏆</span>
-                    <h3 class="text-xl font-bold mb-2 text-white">فعاليات حصرية</h3>
-                    <p class="text-gray-400 text-sm">مسابقات أسبوعية وجوائز قيّمة تنتظرك</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-4">
+                <div class="flex flex-col gap-6">
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                        <span class="text-4xl">🏆</span>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-1">فعاليات حصرية</h3>
+                            <p class="text-gray-400 text-sm">مسابقات أسبوعية وجوائز قتمة تنتظرك</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                        <span class="text-4xl">🛡️</span>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-1">إدارة احتراف</h3>
+                            <p class="text-gray-400 text-sm">طاقم متواجد 24/7 لضمان أفضل تجربة</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                        <span class="text-4xl">🚀</span>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-1">ليبه تفاعلية</h3>
+                            <p class="text-gray-400 text-sm">مجتمع نشط ،بوتات مميزة، وأجواء لا تنسىا</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="glass-card p-8 rounded-3xl flex flex-col items-center">
-                    <span class="text-4xl mb-4">🛡️</span>
-                    <h3 class="text-xl font-bold mb-2 text-white">إدارة احترافية</h3>
-                    <p class="text-gray-400 text-sm">طاقم متواجد 24/7 لضمان أفضل تجربة</p>
-                </div>
-                <div class="glass-card p-8 rounded-3xl flex flex-col items-center">
-                    <span class="text-4xl mb-4">🚀</span>
-                    <h3 class="text-xl font-bold mb-2 text-white">بيئة تفاعلية</h3>
-                    <p class="text-gray-400 text-sm">مجتمع نشط، بوتات مميزة، وأجواء لا تُنسى</p>
+
+                <div class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center">
+                    <h3 class="text-xl font-bold text-white mb-4">مرحبا بالأعضاءП</h3>
+                    <iframe src="https://discord.com/widget?id=1528147384914153512&theme=dark" width="100%" height="350" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" class="rounded-xl border-0"></iframe>
                 </div>
             </div>
 
-            <a href="https://discord.gg/Fcdz5YeMb" target="_blank" class="discord-btn text-white font-bold text-2xl py-4 px-12 rounded-full flex items-center gap-3">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 127.14 96.36">
-                    <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.2,46,96.12,53,91.08,65.69,84.69,65.69Z"></path>
-                </svg>
-                انضم إلى العائلة الآن
+            <a href="https://discord.gg/Fcdz5YeMb" target="_blank" class="discord-btn text-white font-bold text-xl py-3 px-10 rounded-full flex items-center gap-3 mt-10 mb-8">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.2,46,96.12,53,91.08,65.69,84.69,65.69Z"></path></svg>
+                دخول السيررر
             </a>
-            
-            <div class="mt-16 text-gray-600 text-sm">
-                &copy; 2026 Family Community. All rights reserved.
-            </div>
         </div>
     </body>
     </html>
     """
     return render_template_string(html_content)
-
