@@ -267,6 +267,8 @@ FAMILY_HTML = """
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Family | مجتمعنا</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة الأيقونات الاحترافية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { font-family: 'Cairo', sans-serif; }
         body { background: #0a0a1a; min-height: 100vh; overflow-x: hidden; position: relative; display: flex; align-items: center; justify-content: center; padding: 20px 0; }
@@ -292,14 +294,25 @@ FAMILY_HTML = """
         .modal.active { display: flex; }
         .modal-content { background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; max-width: 500px; width: 100%; padding: 24px; animation: modalIn 0.3s ease; max-height: 85vh; overflow-y: auto; }
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .badge-new { position: absolute; top: -6px; right: -6px; background: linear-gradient(135deg, #f43f5e, #ec4899); color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; animation: bounce 2s ease infinite; z-index: 10; }
+        
+        /* شارة قريباً تم إصلاحها */
+        .badge-new { position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #f43f5e, #ec4899); color: white; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; animation: bounce 2s ease infinite; z-index: 50; box-shadow: 0 0 15px rgba(236, 72, 153, 0.6); border: 1px solid rgba(255,255,255,0.2); white-space: nowrap;}
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        
         .fade-in { animation: fadeIn 0.8s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
         .glow-purple { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); } .glow-purple:hover { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
         .glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.3); } .glow-cyan:hover { box-shadow: 0 0 40px rgba(6, 182, 212, 0.6); }
         .glow-pink { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3); } .glow-pink:hover { box-shadow: 0 0 40px rgba(236, 72, 153, 0.6); }
         .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); } .glow-emerald:hover { box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
+        
+        /* تأثير توهج للأيقونات */
+        .icon-glow-cyan { filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }
+        .icon-glow-pink { filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.8)); }
+        .icon-glow-emerald { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8)); }
+        .icon-glow-amber { filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8)); }
+        .icon-glow-purple { filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.8)); }
     </style>
 </head>
 <body>
@@ -311,15 +324,41 @@ FAMILY_HTML = """
         </div>
         <div class="glass rounded-3xl p-6 md:p-8 mb-8">
             <h2 class="text-white font-bold text-xl mb-6 text-center">اختر ما تريد</h2>
-            <a href="https://discord.gg/z978P5MMB" target="_blank" rel="noopener" class="btn btn-shine glow-purple block w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg py-4 rounded-2xl text-center mb-4"><span class="relative z-10">🚀 ادخل للسيرفر</span></a>
+            <a href="https://discord.gg/z978P5MMB" target="_blank" rel="noopener" class="btn btn-shine glow-purple block w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg py-4 rounded-2xl text-center mb-4 flex justify-center items-center gap-3">
+                <i class="fas fa-rocket text-2xl icon-glow-purple"></i> <span class="relative z-10">ادخل للسيرفر</span>
+            </a>
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="openModal('eventsModal')" class="btn glow-cyan bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1"><span class="text-2xl">🎉</span><span>فعاليات</span></button>
-                <button onclick="openModal('competitionsModal')" class="btn glow-pink bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1"><span class="text-2xl">🏆</span><span>مسابقات</span></button>
-                <button onclick="openModal('teamModal')" class="btn glow-emerald bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1"><span class="text-2xl">👥</span><span>الطاقم</span></button>
+                
+                <!-- أيقونة الفعاليات (كأس احتفال) -->
+                <button onclick="openModal('eventsModal')" class="btn glow-cyan bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-2">
+                    <i class="fas fa-champagne-glasses text-3xl text-cyan-400 icon-glow-cyan"></i>
+                    <span>فعاليات</span>
+                </button>
+                
+                <!-- أيقونة المسابقات (كأس) -->
+                <button onclick="openModal('competitionsModal')" class="btn glow-pink bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-2">
+                    <i class="fas fa-trophy text-3xl text-pink-400 icon-glow-pink"></i>
+                    <span>مسابقات</span>
+                </button>
+                
+                <!-- أيقونة الطاقم (مجموعة أشخاص) -->
+                <button onclick="openModal('teamModal')" class="btn glow-emerald bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-2">
+                    <i class="fas fa-users text-3xl text-emerald-400 icon-glow-emerald"></i>
+                    <span>الطاقم</span>
+                </button>
+                
+                <!-- أيقونة المتجر (عربة تسوق) مع شارة قريباً المصححة -->
                 {% if shop_items %}
-                <button onclick="openModal('shopModal')" class="btn glow-pink bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1"><span class="text-2xl">🛒</span><span>متجر الشحن</span></button>
+                <button onclick="openModal('shopModal')" class="btn glow-pink bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-2">
+                    <i class="fas fa-store text-3xl text-amber-400 icon-glow-amber"></i>
+                    <span>متجر الشحن</span>
+                </button>
                 {% else %}
-                <button onclick="openModal('shopModal')" class="btn relative bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1 opacity-80"><span class="badge-new">قريباً</span><span class="text-2xl">🛒</span><span>متجر الشحن</span></button>
+                <button onclick="openModal('shopModal')" class="btn relative bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-2 opacity-80">
+                    <span class="badge-new">قريباً</span>
+                    <i class="fas fa-store text-3xl text-amber-400 icon-glow-amber"></i>
+                    <span>متجر الشحن</span>
+                </button>
                 {% endif %}
             </div>
         </div>
@@ -329,38 +368,46 @@ FAMILY_HTML = """
         <p class="text-center text-white/40 text-sm mb-4">© 2025 Family • All Rights Reserved</p>
     </main>
 
+    <!-- نافذة الفعاليات -->
     <div id="eventsModal" class="modal" onclick="closeModalOnBg(event, 'eventsModal')">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><span>🎉</span> الفعاليات</h3><button onclick="closeModal('eventsModal')" class="text-white/60 hover:text-white text-2xl">✕</button></div>
+            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><i class="fas fa-champagne-glasses text-cyan-400"></i> الفعاليات</h3><button onclick="closeModal('eventsModal')" class="text-white/60 hover:text-white text-2xl"><i class="fas fa-times"></i></button></div>
             <div class="space-y-3 mt-4">
                 {% for event in events %}<div class="bg-cyan-500/10 border border-cyan-400/30 p-4 rounded-xl"><h4 class="text-white font-bold text-lg mb-1">{{ event.title }}</h4><p class="text-white/70 text-sm">{{ event.description }}</p></div>
-                {% else %}<div class="text-center py-8"><div class="text-6xl mb-4">🎊</div><p class="text-white/80 text-lg font-semibold mb-2">ترقبوا الفعاليات القادمة!</p></div>{% endfor %}
+                {% else %}<div class="text-center py-8"><i class="fas fa-calendar-xmark text-6xl text-cyan-400/50 mb-4"></i><p class="text-white/80 text-lg font-semibold mb-2">ترقبوا الفعاليات القادمة!</p></div>{% endfor %}
             </div>
         </div>
     </div>
+    
+    <!-- نافذة المسابقات -->
     <div id="competitionsModal" class="modal" onclick="closeModalOnBg(event, 'competitionsModal')">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><span>🏆</span> المسابقات</h3><button onclick="closeModal('competitionsModal')" class="text-white/60 hover:text-white text-2xl">✕</button></div>
-            <div class="text-center py-8"><div class="text-6xl mb-4">🥇</div><p class="text-white/80 text-lg font-semibold mb-2">لا توجد مسابقات حالياً</p></div>
+            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><i class="fas fa-trophy text-pink-400"></i> المسابقات</h3><button onclick="closeModal('competitionsModal')" class="text-white/60 hover:text-white text-2xl"><i class="fas fa-times"></i></button></div>
+            <div class="text-center py-8"><i class="fas fa-medal text-6xl text-pink-400/50 mb-4"></i><p class="text-white/80 text-lg font-semibold mb-2">لا توجد مسابقات حالياً</p></div>
         </div>
     </div>
+    
+    <!-- نافذة الطاقم -->
     <div id="teamModal" class="modal" onclick="closeModalOnBg(event, 'teamModal')">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><span>👥</span> طاقم Family</h3><button onclick="closeModal('teamModal')" class="text-white/60 hover:text-white text-2xl">✕</button></div>
+            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><i class="fas fa-users text-emerald-400"></i> طاقم Family</h3><button onclick="closeModal('teamModal')" class="text-white/60 hover:text-white text-2xl"><i class="fas fa-times"></i></button></div>
             <div class="space-y-3 mt-4">
                 {% for member in staff %}<div class="flex justify-between items-center bg-{{ member.color }}/20 border border-{{ member.color }}/30 p-3 rounded-xl"><span class="text-white font-bold">{{ member.name }}</span><span class="text-{{ member.color }} text-sm font-semibold">{{ member.role }}</span></div>{% endfor %}
             </div>
         </div>
     </div>
+    
+    <!-- نافذة المتجر -->
     <div id="shopModal" class="modal" onclick="closeModalOnBg(event, 'shopModal')">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><span>🛒</span> متجر الشحن</h3><button onclick="closeModal('shopModal')" class="text-white/60 hover:text-white text-2xl">✕</button></div>
+            <div class="flex justify-between items-center mb-4"><h3 class="text-white text-2xl font-bold flex items-center gap-2"><i class="fas fa-store text-amber-400"></i> متجر الشحن</h3><button onclick="closeModal('shopModal')" class="text-white/60 hover:text-white text-2xl"><i class="fas fa-times"></i></button></div>
             <div class="space-y-3 mt-4">
                 {% for item in shop_items %}<div class="bg-amber-500/10 border border-amber-400/30 p-4 rounded-xl flex justify-between items-center"><div><h4 class="text-white font-bold text-lg mb-1">{{ item.title }}</h4><p class="text-white/70 text-sm">{{ item.description }}</p></div><span class="text-amber-400 font-bold text-xl bg-black/30 px-3 py-1 rounded-lg">{{ item.price }}</span></div>
-                {% else %}<div class="text-center py-8"><div class="text-6xl mb-4">🚧</div><p class="text-white/80 text-lg font-semibold mb-2">قيد التجهيز</p></div>{% endfor %}
+                {% else %}<div class="text-center py-8"><i class="fas fa-screwdriver-wrench text-6xl text-amber-400/50 mb-4"></i><p class="text-white/80 text-lg font-semibold mb-2">قيد التجهيز</p></div>{% endfor %}
             </div>
         </div>
     </div>
+    
     <script>
         function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
@@ -383,13 +430,12 @@ FAMILY_ADMIN_LOGIN = """
 FAMILY_ADMIN_DASHBOARD = """
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
     <h2 style="color: #c084fc; font-size: 1.5rem; margin: 0;">مركز تحكم Family</h2>
-    <a href="/family-logout" style="color: #ef4444; text-decoration: none; font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-radius: 8px;">خروج 🚪</a>
+    <a href="/family-logout" style="color: #ef4444; text-decoration: none; font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-radius: 8px;"><i class="fas fa-sign-out-alt"></i> خروج</a>
 </div>
-<h3 style="color: #a78bfa; margin-bottom: 15px;">👥 إدارة الطاقم</h3>
+<h3 style="color: #a78bfa; margin-bottom: 15px;"><i class="fas fa-users"></i> إدارة الطاقم</h3>
 <form action="/family-admin/add_staff" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="name" placeholder="اسم العضو" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
     
-    <!-- تم تحويل هذا الحقل إلى إدخال حر للسماح بكتابة أي رتبة -->
     <input list="roles_list" name="role" placeholder="اسم الرتبة (اكتب أو اختر)" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
     <datalist id="roles_list">
         <option value="Owner">
@@ -426,18 +472,18 @@ FAMILY_ADMIN_DASHBOARD = """
     <button type="submit" class="btn" style="width: auto; padding: 10px 20px; background: #22c55e;">+ إضافة</button>
 </form>
 <div class="table-container" style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-bottom: 30px;">
-    {% for member in staff %}<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);"><div><span class="text-white font-bold">{{ member.name }}</span> - <span style="color: #94a3b8; font-size: 0.9rem;">{{ member.role }}</span></div><form action="/family-admin/delete_staff/{{ member.id }}" method="POST" style="margin: 0;"><button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">حذف</button></form></div>{% endfor %}
+    {% for member in staff %}<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);"><div><span class="text-white font-bold">{{ member.name }}</span> - <span style="color: #94a3b8; font-size: 0.9rem;">{{ member.role }}</span></div><form action="/family-admin/delete_staff/{{ member.id }}" method="POST" style="margin: 0;"><button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;"><i class="fas fa-trash"></i></button></form></div>{% endfor %}
 </div>
-<h3 style="color: #22d3ee; margin-bottom: 15px;">🎉 إدارة الفعاليات</h3>
+<h3 style="color: #22d3ee; margin-bottom: 15px;"><i class="fas fa-champagne-glasses"></i> إدارة الفعاليات</h3>
 <form action="/family-admin/add_event" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="title" placeholder="عنوان الفعالية" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
     <input type="text" name="description" placeholder="تفاصيل الفعالية" required style="flex: 2; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
     <button type="submit" class="btn" style="width: auto; padding: 10px 20px; background: #06b6d4;">+ إضافة</button>
 </form>
 <div class="table-container" style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-bottom: 30px;">
-    {% for event in events %}<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);"><div><span class="text-white font-bold">{{ event.title }}</span> - <span style="color: #94a3b8; font-size: 0.9rem;">{{ event.description }}</span></div><form action="/family-admin/delete_event/{{ event.id }}" method="POST" style="margin: 0;"><button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">حذف</button></form></div>{% endfor %}
+    {% for event in events %}<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);"><div><span class="text-white font-bold">{{ event.title }}</span> - <span style="color: #94a3b8; font-size: 0.9rem;">{{ event.description }}</span></div><form action="/family-admin/delete_event/{{ event.id }}" method="POST" style="margin: 0;"><button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;"><i class="fas fa-trash"></i></button></form></div>{% endfor %}
 </div>
-<h3 style="color: #fbbf24; margin-bottom: 15px;">🛒 إدارة المتجر (العروض)</h3>
+<h3 style="color: #fbbf24; margin-bottom: 15px;"><i class="fas fa-store"></i> إدارة المتجر (العروض)</h3>
 <form action="/family-admin/add_shop" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="title" placeholder="اسم العرض (مثال: 100 ألف)" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
     <input type="text" name="description" placeholder="تفاصيل العرض" required style="flex: 2; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
@@ -445,7 +491,7 @@ FAMILY_ADMIN_DASHBOARD = """
     <button type="submit" class="btn" style="width: auto; padding: 10px 20px; background: #f59e0b;">+ إضافة</button>
 </form>
 <div class="table-container" style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-bottom: 30px;">
-    {% for item in shop %}<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);"><div><span class="text-white font-bold">{{ item.title }}</span> - <span style="color: #94a3b8; font-size: 0.9rem;">{{ item.price }}</span></div><form action="/family-admin/delete_shop/{{ item.id }}" method="POST" style="margin: 0;"><button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">حذف</button></form></div>{% endfor %}
+    {% for item in shop %}<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);"><div><span class="text-white font-bold">{{ item.title }}</span> - <span style="color: #94a3b8; font-size: 0.9rem;">{{ item.price }}</span></div><form action="/family-admin/delete_shop/{{ item.id }}" method="POST" style="margin: 0;"><button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;"><i class="fas fa-trash"></i></button></form></div>{% endfor %}
 </div>
 """
 
@@ -524,7 +570,6 @@ def logout():
 @app.route('/family')
 def family_page():
     try:
-        # الترتيب الهرمي الشامل للطاقم
         staff_query = """
             SELECT id, name, role, color FROM family_staff 
             ORDER BY 
