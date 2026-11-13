@@ -101,7 +101,7 @@ def init_db():
         )
     """)
     
-    # إضافة طاقم افتراضي إذا كان الجدول فارغاً
+    # إضافة طاقم Family الافتراضي
     res_staff = execute_query("SELECT count(*) FROM family_staff")
     staff_count = int(res_staff["rows"][0][0]["value"]) if res_staff and res_staff.get("rows") else 0
     if staff_count == 0:
@@ -133,7 +133,7 @@ def get_companies():
     if not res or not res.get("rows"): return []
     return [{"id": row[0]["value"], "name": row[1]["value"]} for row in res["rows"]]
 
-# --- التصميم الأساسي ---
+# --- التصميم الأساسي VTC ---
 HTML_LAYOUT = """
 <!doctype html>
 <html dir="rtl" lang="ar">
@@ -145,28 +145,75 @@ HTML_LAYOUT = """
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root {
-    --primary: #5865F2; --primary-hover: #4752C4; --bg-dark: #0f1115; --card-bg: rgba(30, 33, 36, 0.7);
-    --text-main: #f2f3f5; --text-muted: #b5bac1; --success: #23a559; --danger: #da373c;
+    --primary: #5865F2;
+    --primary-hover: #4752C4;
+    --bg-dark: #0f1115;
+    --card-bg: rgba(30, 33, 36, 0.7);
+    --text-main: #f2f3f5;
+    --text-muted: #b5bac1;
+    --success: #23a559;
+    --danger: #da373c;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #0f1115 0%, #1a1c23 100%); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-  .header { width: 100%; padding: 30px 20px; text-align: center; background: rgba(15, 17, 21, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); margin-bottom: 30px; }
+  body { 
+    font-family: 'Tajawal', sans-serif; 
+    background: linear-gradient(135deg, #0f1115 0%, #1a1c23 100%);
+    color: var(--text-main); 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .header { 
+    width: 100%; 
+    padding: 30px 20px; 
+    text-align: center; 
+    background: rgba(15, 17, 21, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+  }
   .header h1 { font-size: 28px; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(88, 101, 242, 0.5); }
   .header h1 span { color: var(--primary); }
-  .container { width: 100%; max-width: 700px; background: var(--card-bg); border-radius: 16px; padding: 30px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 40px; }
+  .container { 
+    width: 100%;
+    max-width: 700px; 
+    background: var(--card-bg); 
+    border-radius: 16px; 
+    padding: 30px; 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 40px;
+  }
   .form-group { margin-bottom: 20px; position: relative; }
   label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; font-size: 15px; }
-  input, select, textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0, 0, 0, 0.2); color: #fff; font-size: 16px; font-family: inherit; transition: all 0.3s ease; }
+  input, select, textarea { 
+    width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); 
+    background: rgba(0, 0, 0, 0.2); color: #fff; font-size: 16px; font-family: inherit; transition: all 0.3s ease;
+  }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(88, 101, 242, 0.3); background: rgba(0, 0, 0, 0.4); }
   textarea { resize: vertical; min-height: 80px; }
-  .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; background: linear-gradient(90deg, var(--primary) 0%, #7289da 100%); color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4); font-family: inherit; }
+  .btn { 
+    width: 100%; padding: 15px; border: none; border-radius: 10px; background: linear-gradient(90deg, var(--primary) 0%, #7289da 100%);
+    color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4); font-family: inherit;
+  }
   .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6); }
+  .btn:active { transform: translateY(0); }
   .alert { padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
   .alert-success { background: rgba(35, 165, 89, 0.2); color: #4ade80; border: 1px solid rgba(35, 165, 89, 0.3); }
   .alert-error { background: rgba(218, 55, 60, 0.2); color: #f87171; border: 1px solid rgba(218, 55, 60, 0.3); }
-  .admin-table { width: 100%; border-collapse: collapse; text-align: right; margin-bottom: 20px; }
-  .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .admin-table th { background: rgba(0,0,0,0.3); color: var(--text-muted); }
+  .table-container { overflow-x: auto; width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px;}
+  .admin-table { width: 100%; border-collapse: collapse; text-align: right; }
+  .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .admin-table th { background: rgba(0,0,0,0.3); color: var(--text-muted); font-weight: 700; font-size: 14px; }
+  .admin-table tr:hover { background: rgba(255,255,255,0.02); }
+  .actions { display: flex; gap: 8px; }
+  .btn-sm { padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; color: #fff; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-size: 13px;}
+  .btn-accept { background: var(--success); }
+  .btn-reject { background: var(--danger); }
 </style>
 </head>
 <body>
@@ -176,7 +223,197 @@ HTML_LAYOUT = """
 </html>
 """
 
-HOME_HTML = """... (محتفظ به كما هو من كودك) ..."""
+HOME_HTML = """
+<style>
+    :root { --primary: #00f2fe; --secondary: #4facfe; --dark-bg: #0f172a; --glass-bg: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1); }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+    .vtc-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; position: relative; }
+    #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
+    .split-container { position: relative; z-index: 1; display: flex; width: 100%; max-width: 1200px; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5); overflow: hidden; margin: 20px auto; }
+    .info-side { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(79, 172, 254, 0.05)); border-left: 1px solid var(--glass-border); }
+    .info-side h1 { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+    .info-side p { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 30px; }
+    .rules-box { background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; border-right: 4px solid var(--primary); }
+    .rules-box h3 { margin-bottom: 10px; color: var(--primary); }
+    .rules-box ul { list-style: none; padding-right: 0; }
+    .rules-box li { margin-bottom: 8px; font-size: 0.95rem; color: #e2e8f0; display: flex; align-items: center; gap: 10px; }
+    .rules-box li::before { content: '✦'; color: var(--secondary); }
+    .form-side { flex: 1.2; padding: 50px; }
+    .form-side h2 { font-size: 2rem; margin-bottom: 30px; font-weight: 600; }
+    .input-group { position: relative; margin-bottom: 25px; }
+    .input-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #94a3b8; }
+    .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 10px; color: white; font-size: 1rem; transition: all 0.3s ease; outline: none; }
+    .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); background: rgba(0, 0, 0, 0.5); }
+    .input-group select option { background: var(--dark-bg); color: white; }
+    .input-group textarea { resize: none; height: 100px; }
+    .char-count { position: absolute; bottom: -20px; left: 0; font-size: 0.8rem; color: #64748b; }
+    .btn-submit { width: 100%; padding: 16px; background: linear-gradient(to right, var(--primary), var(--secondary)); border: none; border-radius: 10px; color: #0f172a; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 242, 254, 0.4); }
+    .btn-submit:active { transform: translateY(0); }
+    @media (max-width: 900px) { .split-container { flex-direction: column; } .info-side { border-left: none; border-bottom: 1px solid var(--glass-border); padding: 30px; text-align: center; } .info-side h1 { font-size: 2.2rem; } .form-side { padding: 30px; } }
+</style>
+
+<div class="vtc-wrapper">
+    <div id="particles-js"></div>
+    <div class="split-container">
+        <div class="info-side">
+            <h1>OTR3 VTC</h1>
+            <p>مرحباً بك في منصة التسجيل الرسمية لشركات النقل (VTC) في سيرفر <strong>Of Europe3 online</strong>. انضم إلى نخبة السائقين وابدأ رحلتك الاحترافية معنا.</p>
+            <div class="rules-box">
+                <h3>شروط التسجيل:</h3>
+                <ul>
+                    <li>الالتزام بقوانين السيرفر المرورية.</li>
+                    <li>امتلاك رخصة قيادة سارية.</li>
+                    <li>التوفر والاحترافية في التعامل.</li>
+                    <li>عدم استخدام أي برامج غش.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-side">
+            <h2>تقديم طلب انضمام</h2>
+            <form id="vtcForm" action="/apply" method="POST">
+                <div class="input-group">
+                    <label>اسم الديسكورد (Discord)</label>
+                    <input type="text" name="discord_name" id="discord" placeholder="مثال: User#1234" required>
+                </div>
+                <div class="input-group">
+                    <label>اسم اللعبة (In-Game Name)</label>
+                    <input type="text" name="ign" id="game_name" placeholder="مثال: Ahmed_TR" required>
+                </div>
+                <div class="input-group">
+                    <label>العمر (Age)</label>
+                    <input type="number" name="age" id="age" placeholder="مثال: 21" min="15" max="99" required>
+                </div>
+                <div class="input-group">
+                    <label>التقديم بصفة (Apply As)</label>
+                    <select name="role" id="rank" required>
+                        <option value="" disabled selected>اختر نوع التقديم...</option>
+                        <option value="سائق">سائق (Driver)</option>
+                        <option value="مدير شركة">مدير شركة (Company Manager)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>الشركة المراد الانضمام إليها (Company)</label>
+                    <select name="company" id="company" required>
+                        <option value="" disabled selected>اختر الشركة...</option>
+                        {% for c in companies %}
+                        <option value="{{ c.name }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>نبذة عنك (Bio)</label>
+                    <textarea name="description" id="bio" placeholder="اكتب عن خبرتك في القيادة..." maxlength="200" required></textarea>
+                    <span class="char-count" id="charCount">0 / 200</span>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span>إرسال الطلب</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    particlesJS("particles-js", {
+        "particles": { "number": { "value": 60, "density": { "enable": true, "value_area": 800 } }, "color": { "value": ["#00f2fe", "#4facfe"] }, "shape": { "type": "circle" }, "opacity": { "value": 0.5, "random": true }, "size": { "value": 3, "random": true }, "line_linked": { "enable": true, "distance": 150, "color": "#4facfe", "opacity": 0.2, "width": 1 }, "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "out_mode": "out" } },
+        "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }, "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } } },
+        "retina_detect": true
+    });
+
+    const bioInput = document.getElementById('bio');
+    const charCount = document.getElementById('charCount');
+    bioInput.addEventListener('input', () => { charCount.textContent = `${bioInput.value.length} / 200`; });
+</script>
+"""
+
+ADMIN_LOGIN_HTML = """
+<h2 style="text-align:center; margin-bottom: 25px;">لوحة الإدارة</h2>
+{% if error %}<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
+<form method="post" action="/admin">
+  <div class="form-group">
+    <label><i class="fas fa-key"></i> كلمة المرور</label>
+    <input type="password" name="password" required style="text-align: center; font-size: 20px; letter-spacing: 2px;">
+  </div>
+  <button type="submit" class="btn">دخول</button>
+</form>
+"""
+
+ADMIN_DASHBOARD_HTML = """
+<div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; margin-top: 20px; text-align: right;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+        <h2 style="color: #00f2fe; font-size: 1.5rem; margin: 0;">الطلبات المعلقة</h2>
+        <a href="/logout" style="color: #ef4444; text-decoration: none; font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-radius: 8px;">خروج 🚪</a>
+    </div>
+    <div style="overflow-x: auto; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);">
+        <table style="width: 100%; border-collapse: collapse; text-align: right; min-width: 1000px; font-size: 0.95rem; color: #ffffff;">
+            <thead style="background: rgba(0,0,0,0.6); color: #00f2fe;">
+                <tr style="border-bottom: 2px solid #00f2fe;">
+                    <th style="padding: 15px;">الديسكورد</th>
+                    <th style="padding: 15px;">اسم اللعبة</th>
+                    <th style="padding: 15px;">العمر</th>
+                    <th style="padding: 15px;">الرتبة</th>
+                    <th style="padding: 15px;">الشركة</th>
+                    <th style="padding: 15px;">الوصف</th>
+                    <th style="padding: 15px;">الحالة</th>
+                    <th style="padding: 15px;">إجراء</th>
+                </tr>
+            </thead>
+            <tbody style="color: #e2e8f0;">
+                {% for app in apps %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 15px; color: #4facfe; font-weight: bold;">{{ app['discord_name'] if app['discord_name'] else 'غير متوفر' }}</td>
+                    <td style="padding: 15px;">{{ app['ign'] if app['ign'] else 'غير متوفر' }}</td>
+                    <td style="padding: 15px;">{{ app['age'] }}</td>
+                    <td style="padding: 15px;">{{ app['role'] if app['role'] else app['rank'] if app['rank'] else 'غير متوفر' }}</td>
+                    <td style="padding: 15px;">{{ app['company'] }}</td>
+                    <td style="padding: 15px; max-width: 250px; word-wrap: break-word; white-space: pre-wrap; font-size: 0.85rem; color: #cbd5e1;">{{ app['description'] if app['description'] else app['bio'] if app['bio'] else 'لا يوجد وصف' }}</td>
+                    <td style="padding: 15px;">
+                        <span style="background: {% if app['status']|lower == 'pending' %}#f59e0b{% elif app['status']|lower == 'accepted' %}#22c55e{% else %}#ef4444{% endif %}; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; color: #fff; font-weight: bold; display: inline-block; text-align: center; min-width: 70px;">{{ app['status'] }}</span>
+                    </td>
+                    <td style="padding: 15px; white-space: nowrap;">
+                        {% if app['status']|lower == 'pending' %}
+                        <form action="/action/{{ app['id'] }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="accept">
+                            <button type="submit" style="background: #22c55e; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 5px; width: 100%;">قبول ✓</button>
+                        </form>
+                        <form action="/action/{{ app['id'] }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;">رفض ✗</button>
+                        </form>
+                        {% else %}
+                        <span style="color: #64748b; font-size: 0.9rem;">تمت المعالجة</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 20px; color: #64748b;">لا توجد طلبات حالياً</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2 style="color: #00f2fe; font-size: 1.5rem; margin-top: 40px; margin-bottom: 20px;">إدارة الشركات</h2>
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <form action="/add_company" method="POST" style="display: flex; gap: 10px; width: 100%;">
+            <input type="text" name="company_name" placeholder="اسم الشركة الجديدة..." required style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; outline: none;">
+            <button type="submit" style="background: #22c55e; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;">+ إضافة</button>
+        </form>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+        {% for c in companies %}
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+            <span style="font-weight: 600;">{{ c['name'] if c['name'] else c.name }}</span>
+            <form action="/delete_company/{{ c['id'] if c['id'] else c.id }}" method="POST" style="margin: 0;">
+                <button type="submit" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; padding: 8px 12px; border-radius: 5px; cursor: pointer;">🗑️</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+"""
 
 # --- تصميم صفحات Family الديناميكية ---
 FAMILY_HTML = """
@@ -260,7 +497,6 @@ FAMILY_HTML = """
                     <span class="text-2xl">👥</span><span>الطاقم</span>
                 </button>
                 
-                <!-- زر المتجر يظهر فقط إذا كان هناك عروض، وإلا يظهر قريباً -->
                 {% if shop_items %}
                 <button onclick="openModal('shopModal')" class="btn glow-pink bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
                     <span class="text-2xl">🛒</span><span>متجر الشحن</span>
@@ -282,7 +518,7 @@ FAMILY_HTML = """
         <p class="text-center text-white/40 text-sm mb-4">© 2025 Family • All Rights Reserved</p>
     </main>
 
-    <!-- نافذة الفعاليات -->
+    <!-- النوافذ المنبثقة -->
     <div id="eventsModal" class="modal" onclick="closeModalOnBg(event, 'eventsModal')">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
@@ -305,7 +541,6 @@ FAMILY_HTML = """
         </div>
     </div>
 
-    <!-- نافذة المسابقات -->
     <div id="competitionsModal" class="modal" onclick="closeModalOnBg(event, 'competitionsModal')">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
@@ -319,7 +554,6 @@ FAMILY_HTML = """
         </div>
     </div>
 
-    <!-- نافذة الطاقم -->
     <div id="teamModal" class="modal" onclick="closeModalOnBg(event, 'teamModal')">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
@@ -337,7 +571,6 @@ FAMILY_HTML = """
         </div>
     </div>
 
-    <!-- نافذة المتجر -->
     <div id="shopModal" class="modal" onclick="closeModalOnBg(event, 'shopModal')">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
@@ -392,7 +625,6 @@ FAMILY_ADMIN_DASHBOARD = """
     <a href="/family-logout" style="color: #ef4444; text-decoration: none; font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-radius: 8px;">خروج 🚪</a>
 </div>
 
-<!-- إدارة الطاقم -->
 <h3 style="color: #a78bfa; margin-bottom: 15px;">👥 إدارة الطاقم</h3>
 <form action="/family-admin/add_staff" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="name" placeholder="اسم العضو" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
@@ -421,7 +653,6 @@ FAMILY_ADMIN_DASHBOARD = """
     {% endfor %}
 </div>
 
-<!-- إدارة الفعاليات -->
 <h3 style="color: #22d3ee; margin-bottom: 15px;">🎉 إدارة الفعاليات</h3>
 <form action="/family-admin/add_event" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="title" placeholder="عنوان الفعالية" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
@@ -439,7 +670,6 @@ FAMILY_ADMIN_DASHBOARD = """
     {% endfor %}
 </div>
 
-<!-- إدارة المتجر -->
 <h3 style="color: #fbbf24; margin-bottom: 15px;">🛒 إدارة المتجر (العروض)</h3>
 <form action="/family-admin/add_shop" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="title" placeholder="اسم العرض (مثال: 100 ألف)" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
@@ -459,7 +689,84 @@ FAMILY_ADMIN_DASHBOARD = """
 </div>
 """
 
-# --- مسارات Family المحدثة ---
+# --- مسارات VTC الأصلية ---
+@app.route("/", methods=["GET"])
+def home():
+    msg = request.args.get("msg")
+    companies = get_companies()
+    return render_template_string(HTML_LAYOUT, content=render_template_string(HOME_HTML, companies=companies, msg=msg))
+
+@app.route("/apply", methods=["POST"])
+def apply():
+    discord_name = request.form.get("discord_name")
+    ign = request.form.get("ign")
+    age = request.form.get("age")
+    role = request.form.get("role")
+    company = request.form.get("company")
+    description = request.form.get("description", "")
+    try:
+        execute_query(
+            "INSERT INTO applications (discord_name, ign, age, role, company, description, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')",
+            [discord_name, ign, age, role, company, description]
+        )
+        return redirect(url_for('home', msg="تم إرسال طلبك بنجاح! انتظر مراجعة الإدارة."))
+    except Exception as e:
+        return f"<div class='alert alert-error'>حدث خطأ في قاعدة البيانات: {str(e)}</div>", 500
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    if request.method == "POST":
+        if request.form.get("password") == "admin123":
+            session['admin'] = True
+            return redirect(url_for('admin'))
+        else:
+            return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_LOGIN_HTML, error="كلمة المرور خاطئة"))
+    if not session.get('admin'):
+        return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_LOGIN_HTML, error=None))
+    try:
+        result = execute_query("SELECT * FROM applications WHERE status='pending' ORDER BY id DESC")
+        apps = []
+        if result:
+            cols = [c.get("name") for c in result.get("cols", [])]
+            raw_rows = result.get("rows", [])
+            for row in raw_rows:
+                row_values = [col.get("value") for col in row]
+                apps.append(dict(zip(cols, row_values)))
+    except Exception as e:
+        return f"<div class='alert alert-error'>خطأ في الإدارة: {str(e)}</div>", 500
+    companies = get_companies()
+    return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_DASHBOARD_HTML, apps=apps, companies=companies))
+
+@app.route("/add_company", methods=["POST"])
+def add_company():
+    if not session.get('admin'): return redirect(url_for('admin'))
+    name = request.form.get("company_name").strip()
+    if name:
+        try:
+            execute_query("INSERT INTO companies (name) VALUES (?)", [name])
+        except Exception: pass 
+    return redirect(url_for('admin'))
+
+@app.route("/delete_company/<int:id>", methods=["POST"])
+def delete_company(id):
+    if not session.get('admin'): return redirect(url_for('admin'))
+    execute_query("DELETE FROM companies WHERE id=?", [str(id)])
+    return redirect(url_for('admin'))
+
+@app.route("/action/<int:id>", methods=["POST"])
+def action(id):
+    if not session.get('admin'): return redirect(url_for('admin'))
+    action = request.form.get("action")
+    status = "accepted" if action == "accept" else "rejected"
+    execute_query("UPDATE applications SET status=? WHERE id=?", [status, str(id)])
+    return redirect(url_for('admin'))
+
+@app.route("/logout")
+def logout():
+    session.pop('admin', None)
+    return redirect(url_for('home'))
+
+# --- مسارات Family الجديدة ---
 @app.route('/family')
 def family_page():
     try:
@@ -501,10 +808,8 @@ def family_admin_login():
             return redirect(url_for('family_admin_dashboard'))
         else:
             return render_template_string(HTML_LAYOUT, content=render_template_string(FAMILY_ADMIN_LOGIN, error="كلمة المرور خاطئة"))
-    
     if not session.get('family_admin'):
         return render_template_string(HTML_LAYOUT, content=render_template_string(FAMILY_ADMIN_LOGIN, error=None))
-    
     return redirect(url_for('family_admin_dashboard'))
 
 @app.route('/family-admin/dashboard')
@@ -546,128 +851,4 @@ def family_add_staff():
 
 @app.route('/family-admin/delete_staff/<id>', methods=['POST'])
 def family_delete_staff(id):
-    if not session.get('family_admin'): return redirect(url_for('family_admin_login'))
-    execute_query("DELETE FROM family_staff WHERE id=?", [id])
-    return redirect(url_for('family_admin_dashboard'))
-
-@app.route('/family-admin/add_event', methods=['POST'])
-def family_add_event():
-    if not session.get('family_admin'): return redirect(url_for('family_admin_login'))
-    title = request.form.get("title")
-    description = request.form.get("description")
-    execute_query("INSERT INTO family_events (title, description) VALUES (?, ?)", [title, description])
-    return redirect(url_for('family_admin_dashboard'))
-
-@app.route('/family-admin/delete_event/<id>', methods=['POST'])
-def family_delete_event(id):
-    if not session.get('family_admin'): return redirect(url_for('family_admin_login'))
-    execute_query("DELETE FROM family_events WHERE id=?", [id])
-    return redirect(url_for('family_admin_dashboard'))
-
-@app.route('/family-admin/add_shop', methods=['POST'])
-def family_add_shop():
-    if not session.get('family_admin'): return redirect(url_for('family_admin_login'))
-    title = request.form.get("title")
-    description = request.form.get("description")
-    price = request.form.get("price")
-    execute_query("INSERT INTO family_shop (title, description, price) VALUES (?, ?, ?)", [title, description, price])
-    return redirect(url_for('family_admin_dashboard'))
-
-@app.route('/family-admin/delete_shop/<id>', methods=['POST'])
-def family_delete_shop(id):
-    if not session.get('family_admin'): return redirect(url_for('family_admin_login'))
-    execute_query("DELETE FROM family_shop WHERE id=?", [id])
-    return redirect(url_for('family_admin_dashboard'))
-
-@app.route('/family-logout')
-def family_logout():
-    session.pop('family_admin', None)
-    return redirect(url_for('family_page'))
-
-# --- المسارات القديمة (VTC) ---
-# (أضف هنا مسارات VTC القديمة: /, /apply, /admin, /add_company, /delete_company, /action, /logout)
-# ... (لقد اختصرتها هنا للتوضيح فقط، لا تنسَ نسخها من كودك القديم إن أردت، لكني سأدمجها لك في الملف النهائي)
-
-@app.route("/", methods=["GET"])
-def home():
-    msg = request.args.get("msg")
-    companies = get_companies()
-    return render_template_string(HTML_LAYOUT, content=render_template_string(HOME_HTML, companies=companies, msg=msg))
-
-@app.route("/apply", methods=["POST"])
-def apply():
-    discord_name = request.form.get("discord_name")
-    ign = request.form.get("ign")
-    age = request.form.get("age")
-    role = request.form.get("role")
-    company = request.form.get("company")
-    description = request.form.get("description", "")
-    try:
-        execute_query(
-            "INSERT INTO applications (discord_name, ign, age, role, company, description, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')",
-            [discord_name, ign, age, role, company, description]
-        )
-        return redirect(url_for('home', msg="تم إرسال طلبك بنجاح! انتظر مراجعة الإدارة."))
-    except Exception as e:
-        return f"<div class='alert alert-error'>حدث خطأ في قاعدة البيانات: {str(e)}</div>", 500
-
-@app.route("/admin", methods=["GET", "POST"])
-def admin():
-    if request.method == "POST":
-        if request.form.get("password") == "admin123":
-            session['admin'] = True
-            return redirect(url_for('admin'))
-        else:
-            return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_LOGIN_HTML, error="كلمة المرور خاطئة"))
-    
-    if not session.get('admin'):
-        return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_LOGIN_HTML, error=None))
-    
-    try:
-        result = execute_query("SELECT * FROM applications WHERE status='pending' ORDER BY id DESC")
-        apps = []
-        if result:
-            cols = [c.get("name") for c in result.get("cols", [])]
-            raw_rows = result.get("rows", [])
-            for row in raw_rows:
-                row_values = [col.get("value") for col in row]
-                apps.append(dict(zip(cols, row_values)))
-    except Exception as e:
-        return f"<div class='alert alert-error'>خطأ في الإدارة: {str(e)}</div>", 500
-        
-    companies = get_companies()
-    return render_template_string(HTML_LAYOUT, content=render_template_string(ADMIN_DASHBOARD_HTML, apps=apps, companies=companies))
-
-@app.route("/add_company", methods=["POST"])
-def add_company():
-    if not session.get('admin'): return redirect(url_for('admin'))
-    name = request.form.get("company_name").strip()
-    if name:
-        try:
-            execute_query("INSERT INTO companies (name) VALUES (?)", [name])
-        except Exception:
-            pass 
-    return redirect(url_for('admin'))
-
-@app.route("/delete_company/<int:id>", methods=["POST"])
-def delete_company(id):
-    if not session.get('admin'): return redirect(url_for('admin'))
-    execute_query("DELETE FROM companies WHERE id=?", [str(id)])
-    return redirect(url_for('admin'))
-
-@app.route("/action/<int:id>", methods=["POST"])
-def action(id):
-    if not session.get('admin'): return redirect(url_for('admin'))
-    action = request.form.get("action")
-    status = "accepted" if action == "accept" else "rejected"
-    execute_query("UPDATE applications SET status=? WHERE id=?", [status, str(id)])
-    return redirect(url_for('admin'))
-
-@app.route("/logout")
-def logout():
-    session.pop('admin', None)
-    return redirect(url_for('home'))
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    if not session.get('family_admin'): return redirect(url_f
