@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Cairo', sans-serif; }
-        body { background: #0a0a1a; min-height: 100vh; overflow-x: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+        body { background: #0a0a1a; min-height: 100vh; overflow-x: hidden; position: relative; display: flex; align-items: center; justify-content: center; padding: 20px 0; }
         
         .animated-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -60,7 +60,7 @@
         
         .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
-        .modal-content { background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; max-width: 500px; width: 100%; padding: 32px; animation: modalIn 0.3s ease; }
+        .modal-content { background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; max-width: 500px; width: 100%; padding: 24px; animation: modalIn 0.3s ease; max-height: 85vh; overflow-y: auto; }
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         
         .badge-new { position: absolute; top: -8px; right: -8px; background: linear-gradient(135deg, #f43f5e, #ec4899); color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; animation: bounce 2s ease infinite; }
@@ -85,19 +85,19 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <main class="w-full max-w-2xl px-4 py-12 fade-in relative z-10">
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+    <main class="w-full max-w-2xl px-4 fade-in relative z-10">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-4">
                 <span class="pulse-dot"></span>
                 <span class="text-white/90 text-sm font-semibold">مجتمع Family متصل الآن</span>
             </div>
-            <h1 class="text-5xl md:text-6xl font-black text-white mb-4">
+            <h1 class="text-5xl md:text-6xl font-black text-white mb-3">
                 <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Family</span>
             </h1>
             <p class="text-white/70 text-lg">مجتمعنا • عائلتنا • نجاحنا</p>
         </div>
 
-        <div class="glass rounded-3xl p-6 md:p-8">
+        <div class="glass rounded-3xl p-6 md:p-8 mb-8">
             <h2 class="text-white font-bold text-xl mb-6 text-center">اختر ما تريد</h2>
             
             <a href="https://discord.gg/z978P5MMB" target="_blank" rel="noopener"
@@ -124,9 +124,17 @@
             </div>
         </div>
 
-        <p class="text-center text-white/40 text-sm mt-8">© 2025 Family • All Rights Reserved</p>
+        <!-- ويدجت ديسكورد لإظهار المتصلين -->
+        <div class="glass rounded-3xl p-4 flex justify-center mb-8">
+            <div class="w-full max-w-[350px]">
+                <iframe src="https://discord.com/widget?id=1528147384914153512&theme=dark" width="100%" height="350" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" class="rounded-2xl"></iframe>
+            </div>
+        </div>
+
+        <p class="text-center text-white/40 text-sm mb-4">© 2025 Family • All Rights Reserved</p>
     </main>
 
+    <!-- النوافذ المنبثقة -->
     <div id="eventsModal" class="modal" onclick="closeModalOnBg(event, 'eventsModal')">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
@@ -155,16 +163,79 @@
         </div>
     </div>
 
+    <!-- نافذة الطاقم -->
     <div id="teamModal" class="modal" onclick="closeModalOnBg(event, 'teamModal')">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-white text-2xl font-bold flex items-center gap-2"><span>👥</span> طاقم Family</h3>
                 <button onclick="closeModal('teamModal')" class="text-white/60 hover:text-white text-2xl">✕</button>
             </div>
-            <div class="text-center py-8">
-                <div class="text-6xl mb-4">🛡️</div>
-                <p class="text-white/80 text-lg font-semibold mb-2">إدارة مجتمع Family</p>
-                <p class="text-white/60 text-sm">قائمة الطاقم ستتم إضافتها هنا قريباً.</p>
+            
+            <div class="space-y-3 mt-4">
+                <div class="flex justify-between items-center bg-red-900/40 border border-red-500/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Ammar</span>
+                    <span class="text-red-400 text-sm font-semibold">Community Manager</span>
+                </div>
+                <div class="flex justify-between items-center bg-red-500/20 border border-red-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">!IDRIS</span>
+                    <span class="text-red-400 text-sm font-semibold">Lead</span>
+                </div>
+                <div class="flex justify-between items-center bg-red-500/20 border border-red-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">BEN MISSO</span>
+                    <span class="text-red-400 text-sm font-semibold">Lead</span>
+                </div>
+                <div class="flex justify-between items-center bg-red-500/20 border border-red-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Qx</span>
+                    <span class="text-red-400 text-sm font-semibold">Lead</span>
+                </div>
+                <div class="flex justify-between items-center bg-red-500/20 border border-red-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Riso</span>
+                    <span class="text-red-400 text-sm font-semibold">Lead</span>
+                </div>
+                <div class="flex justify-between items-center bg-red-500/20 border border-red-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Rumi</span>
+                    <span class="text-red-400 text-sm font-semibold">Lead</span>
+                </div>
+                <div class="flex justify-between items-center bg-yellow-500/20 border border-yellow-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Goodman</span>
+                    <span class="text-yellow-400 text-sm font-semibold">Administrator</span>
+                </div>
+                <div class="flex justify-between items-center bg-yellow-500/20 border border-yellow-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Nashmi</span>
+                    <span class="text-yellow-400 text-sm font-semibold">Administrator</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff Abdo</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff ABDO</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff Abdulrahman</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff khalil</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff Saidi</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff SALIH</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff shs</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
+                <div class="flex justify-between items-center bg-purple-500/20 border border-purple-400/30 p-3 rounded-xl">
+                    <span class="text-white font-bold">Staff Yazan</span>
+                    <span class="text-purple-400 text-sm font-semibold">Staff</span>
+                </div>
             </div>
         </div>
     </div>
