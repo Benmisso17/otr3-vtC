@@ -65,7 +65,6 @@ def init_db():
         for c in default_companies:
             execute_query("INSERT INTO companies (name) VALUES (?)", [c])
 
-    # جداول Family
     execute_query("CREATE TABLE IF NOT EXISTS family_staff (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, color TEXT)")
     execute_query("CREATE TABLE IF NOT EXISTS family_events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)")
     execute_query("CREATE TABLE IF NOT EXISTS family_shop (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, price TEXT)")
@@ -389,8 +388,41 @@ FAMILY_ADMIN_DASHBOARD = """
 <h3 style="color: #a78bfa; margin-bottom: 15px;">👥 إدارة الطاقم</h3>
 <form action="/family-admin/add_staff" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
     <input type="text" name="name" placeholder="اسم العضو" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
-    <select name="role" style="padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);"><option value="Community Manager">Community Manager</option><option value="Lead">Lead</option><option value="Administrator">Administrator</option><option value="Staff">Staff</option></select>
-    <select name="color" style="padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);"><option value="red-900">أحمر داكن (CM)</option><option value="red-500">أحمر (Lead)</option><option value="yellow-500">أصفر (Admin)</option><option value="purple-500">بنفسجي (Staff)</option></select>
+    
+    <!-- تم تحويل هذا الحقل إلى إدخال حر للسماح بكتابة أي رتبة -->
+    <input list="roles_list" name="role" placeholder="اسم الرتبة (اكتب أو اختر)" required style="flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
+    <datalist id="roles_list">
+        <option value="Owner">
+        <option value="Founder">
+        <option value="Co-Owner">
+        <option value="Community Manager">
+        <option value="Lead">
+        <option value="Administrator">
+        <option value="Staff">
+        <option value="Moderator">
+        <option value="Helper">
+    </datalist>
+    
+    <select name="color" style="padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);">
+        <option value="red-900">أحمر داكن (CM)</option>
+        <option value="red-500">أحمر (Lead)</option>
+        <option value="yellow-500">أصفر (Admin)</option>
+        <option value="purple-500">بنفسجي (Staff)</option>
+        <option value="blue-500">أزرق</option>
+        <option value="cyan-500">سماوي</option>
+        <option value="emerald-500">زمردي (أخضر)</option>
+        <option value="orange-500">برتقالي</option>
+        <option value="pink-500">وردي</option>
+        <option value="indigo-500">نيلي</option>
+        <option value="teal-500">أخضر مزرق</option>
+        <option value="rose-500">زهري</option>
+        <option value="amber-500">كهرماني</option>
+        <option value="lime-500">ليموني</option>
+        <option value="green-500">أخضر ساطع</option>
+        <option value="sky-500">أزرق فاتح</option>
+        <option value="violet-500">بنفسجي فاتح</option>
+        <option value="fuchsia-500">فوشيا</option>
+    </select>
     <button type="submit" class="btn" style="width: auto; padding: 10px 20px; background: #22c55e;">+ إضافة</button>
 </form>
 <div class="table-container" style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-bottom: 30px;">
@@ -492,7 +524,31 @@ def logout():
 @app.route('/family')
 def family_page():
     try:
-        staff_res = execute_query("SELECT id, name, role, color FROM family_staff")
+        # الترتيب الهرمي الشامل للطاقم
+        staff_query = """
+            SELECT id, name, role, color FROM family_staff 
+            ORDER BY 
+                CASE role 
+                    WHEN 'Owner' THEN 1
+                    WHEN 'Founder' THEN 1
+                    WHEN 'المالك' THEN 1
+                    WHEN 'المؤسس' THEN 1
+                    WHEN 'Co-Owner' THEN 2
+                    WHEN 'شريك' THEN 2
+                    WHEN 'Community Manager' THEN 3 
+                    WHEN 'مدير المجتمع' THEN 3
+                    WHEN 'Lead' THEN 4 
+                    WHEN 'قائد' THEN 4
+                    WHEN 'Administrator' THEN 5
+                    WHEN 'إداري' THEN 5
+                    WHEN 'Staff' THEN 6
+                    WHEN 'طاقم' THEN 6
+                    WHEN 'Moderator' THEN 7
+                    WHEN 'Helper' THEN 8
+                    ELSE 9 
+                END ASC, id ASC
+        """
+        staff_res = execute_query(staff_query)
         staff = []
         if staff_res and staff_res.get("rows"):
             cols = [c.get("name") for c in staff_res.get("cols", [])]
@@ -539,7 +595,30 @@ def family_admin_dashboard():
     if not session.get('family_admin'):
         return redirect(url_for('family_admin_login'))
     
-    staff_res = execute_query("SELECT id, name, role, color FROM family_staff")
+    staff_query = """
+        SELECT id, name, role, color FROM family_staff 
+        ORDER BY 
+            CASE role 
+                WHEN 'Owner' THEN 1
+                WHEN 'Founder' THEN 1
+                WHEN 'المالك' THEN 1
+                WHEN 'المؤسس' THEN 1
+                WHEN 'Co-Owner' THEN 2
+                WHEN 'شريك' THEN 2
+                WHEN 'Community Manager' THEN 3 
+                WHEN 'مدير المجتمع' THEN 3
+                WHEN 'Lead' THEN 4 
+                WHEN 'قائد' THEN 4
+                WHEN 'Administrator' THEN 5
+                WHEN 'إداري' THEN 5
+                WHEN 'Staff' THEN 6
+                WHEN 'طاقم' THEN 6
+                WHEN 'Moderator' THEN 7
+                WHEN 'Helper' THEN 8
+                ELSE 9 
+            END ASC, id ASC
+    """
+    staff_res = execute_query(staff_query)
     staff = []
     if staff_res and staff_res.get("rows"):
         cols = [c.get("name") for c in staff_res.get("cols", [])]
