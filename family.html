@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTR3 Family | مجتمعنا</title>
+    <title>Family | مجتمعنا</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Cairo', sans-serif; }
-        body { background: #0a0a1a; min-height: 100vh; overflow-x: hidden; position: relative; }
+        body { background: #0a0a1a; min-height: 100vh; overflow-x: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
         
         .animated-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -75,6 +75,8 @@
         .glow-cyan:hover { box-shadow: 0 0 40px rgba(6, 182, 212, 0.6); }
         .glow-pink { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3); }
         .glow-pink:hover { box-shadow: 0 0 40px rgba(236, 72, 153, 0.6); }
+        .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .glow-emerald:hover { box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
     </style>
 </head>
 <body>
@@ -83,57 +85,46 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <nav class="glass fixed top-0 left-0 right-0 z-50 px-4 py-3">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="/" class="text-white font-bold text-xl flex items-center gap-2 hover:text-purple-400 transition">
-                <span class="text-2xl">🏠</span><span>OTR3</span>
-            </a>
-            <a href="/team" class="text-white/80 hover:text-white text-sm font-semibold transition flex items-center gap-2">
-                <span>👥</span><span>الطاقم</span>
-            </a>
-        </div>
-    </nav>
-
-    <main class="min-h-screen flex items-center justify-center px-4 pt-24 pb-12">
-        <div class="w-full max-w-2xl fade-in">
-            <div class="text-center mb-10">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
-                    <span class="pulse-dot"></span>
-                    <span class="text-white/90 text-sm font-semibold">السيرفر متصل الآن</span>
-                </div>
-                <h1 class="text-5xl md:text-6xl font-black text-white mb-4">
-                    <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">OTR3 Family</span>
-                </h1>
-                <p class="text-white/70 text-lg">مجتمعنا • عائلتنا • نجاحنا</p>
+    <main class="w-full max-w-2xl px-4 py-12 fade-in relative z-10">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+                <span class="pulse-dot"></span>
+                <span class="text-white/90 text-sm font-semibold">مجتمع Family متصل الآن</span>
             </div>
+            <h1 class="text-5xl md:text-6xl font-black text-white mb-4">
+                <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Family</span>
+            </h1>
+            <p class="text-white/70 text-lg">مجتمعنا • عائلتنا • نجاحنا</p>
+        </div>
 
-            <div class="glass rounded-3xl p-6 md:p-8">
-                <h2 class="text-white font-bold text-xl mb-6 text-center">اختر ما تريد</h2>
+        <div class="glass rounded-3xl p-6 md:p-8">
+            <h2 class="text-white font-bold text-xl mb-6 text-center">اختر ما تريد</h2>
+            
+            <a href="https://discord.gg/z978P5MMB" target="_blank" rel="noopener"
+               class="btn btn-shine glow-purple block w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg py-4 rounded-2xl text-center mb-4">
+                <span class="relative z-10">🚀 ادخل للسيرفر</span>
+            </a>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="openModal('eventsModal')" class="btn glow-cyan bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
+                    <span class="text-2xl">🎉</span><span>فعاليات</span>
+                </button>
+                <button onclick="openModal('competitionsModal')" class="btn glow-pink bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
+                    <span class="text-2xl">🏆</span><span>مسابقات</span>
+                </button>
                 
-                <a href="https://discord.gg/z978P5MMB" target="_blank" rel="noopener"
-                   class="btn btn-shine glow-purple block w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg py-4 rounded-2xl text-center mb-4">
-                    <span class="relative z-10">🚀 ادخل للسيرفر</span>
-                </a>
+                <button onclick="openModal('teamModal')" class="btn glow-emerald bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
+                    <span class="text-2xl">👥</span><span>الطاقم</span>
+                </button>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="openModal('eventsModal')" class="btn glow-cyan bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
-                        <span class="text-2xl">🎉</span><span>فعاليات</span>
-                    </button>
-                    <button onclick="openModal('competitionsModal')" class="btn glow-pink bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
-                        <span class="text-2xl">🏆</span><span>مسابقات</span>
-                    </button>
-                    <button onclick="openModal('shopModal')" class="btn relative bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1 opacity-80">
-                        <span class="badge-new">قريباً</span>
-                        <span class="text-2xl">🛒</span><span>متجر الشحن</span>
-                    </button>
-                    <a href="/team" class="btn bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1">
-                        <span class="text-2xl">👥</span><span>الطاقم</span>
-                    </a>
-                </div>
+                <button onclick="openModal('shopModal')" class="btn relative bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-white font-bold py-4 rounded-2xl flex flex-col items-center gap-1 opacity-80">
+                    <span class="badge-new">قريباً</span>
+                    <span class="text-2xl">🛒</span><span>متجر الشحن</span>
+                </button>
             </div>
-
-            <p class="text-center text-white/40 text-sm mt-8">© 2025 OTR3 VTC • All Rights Reserved</p>
         </div>
+
+        <p class="text-center text-white/40 text-sm mt-8">© 2025 Family • All Rights Reserved</p>
     </main>
 
     <div id="eventsModal" class="modal" onclick="closeModalOnBg(event, 'eventsModal')">
@@ -145,7 +136,7 @@
             <div class="text-center py-8">
                 <div class="text-6xl mb-4">🎊</div>
                 <p class="text-white/80 text-lg font-semibold mb-2">ترقبوا الفعاليات القادمة!</p>
-                <p class="text-white/60 text-sm">سيتم الإعلان عن الفعاليات قريباً على السيرفر</p>
+                <p class="text-white/60 text-sm">سيتم الإعلان عن الفعاليات قريباً</p>
             </div>
         </div>
     </div>
@@ -159,7 +150,21 @@
             <div class="text-center py-8">
                 <div class="text-6xl mb-4">🥇</div>
                 <p class="text-white/80 text-lg font-semibold mb-2">لا توجد مسابقات حالياً</p>
-                <p class="text-white/60 text-sm">تابع السيرفر لمعرفة آخر المسابقات</p>
+                <p class="text-white/60 text-sm">تابعنا لمعرفة آخر المسابقات</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="teamModal" class="modal" onclick="closeModalOnBg(event, 'teamModal')">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-white text-2xl font-bold flex items-center gap-2"><span>👥</span> طاقم Family</h3>
+                <button onclick="closeModal('teamModal')" class="text-white/60 hover:text-white text-2xl">✕</button>
+            </div>
+            <div class="text-center py-8">
+                <div class="text-6xl mb-4">🛡️</div>
+                <p class="text-white/80 text-lg font-semibold mb-2">إدارة مجتمع Family</p>
+                <p class="text-white/60 text-sm">قائمة الطاقم ستتم إضافتها هنا قريباً.</p>
             </div>
         </div>
     </div>
@@ -198,4 +203,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
